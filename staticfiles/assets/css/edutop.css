@@ -1,0 +1,232 @@
+@font-face {
+    font-family: "ExoBold";
+    src: url("../fonts/Exo-Bold.ttf");
+}
+
+@font-face {
+    font-family: "ExoMed";
+    src: url("../fonts/Exo-MediumItalic.ttf");
+}
+
+
+@font-face {
+    font-family: "ExoLight";
+    src: url("../fonts/Exo-Regular.ttf");
+}
+
+:root {
+    --main-color: #F16623;
+}
+
+.vertical-menu {
+    width: 225px;
+}
+
+.main-color {
+    color: #F16623 !important;
+}
+
+.main-background-color {
+    background-color: #F16623 !important;
+    border: none;
+}
+
+
+li.paginate_button.page-item.active{
+    background-color: #F16623;
+}
+
+
+#sidebar-menu ul li.mm-active {
+    color: #F16623
+}
+
+#sidebar-menu ul li.mm-active > a {
+    background-color: #f2f3fe;
+    color: #F16623
+}
+
+#sidebar-menu ul li.mm-active > a .nav-icon {
+    color: #F16623 !important
+}
+
+#sidebar-menu ul li.mm-active .mm-show .mm-active > a {
+    color: #383c40 !important
+}
+
+#sidebar-menu ul li.mm-active .mm-show .mm-active > a:before {
+    border-color: #F16623 !important;
+    background-color: #F16623 !important
+}
+
+#sidebar-menu ul li ul.sub-menu li a:hover:before {
+    border-color: #F16623 !important;
+    background-color: #F16623 !important;
+}
+
+
+.detail_heading {
+    font-family: "GilroyLight";
+}
+
+
+.course_name {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-family: "GilroyBold";
+    opacity: 0.8;
+}
+
+.course_name-span {
+    font-family: "GilroyLight";
+    font-size: 13px;
+    margin-left: 5px;
+    opacity: 0.8;
+}
+
+.a-href {
+    color: var(--main-color);
+}
+
+.a-href:hover {
+    color: var(--main-color);
+    opacity: 0.6;
+}
+
+.dt-row {
+    overflow-y: scroll !important;
+}
+
+.is-active {
+    color: green;
+    font-family: ExoBold, serif !important;
+}
+
+.is-not-active {
+    color: var(--main-color);
+    font-family: ExoBold, serif !important;
+
+}
+
+
+.shadow-default {
+    -webkit-box-shadow: 0px 5px 21px 2px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 5px 21px 2px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 5px 21px 2px rgba(34, 60, 80, 0.2);
+}
+
+.shadow-1 {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+}
+
+.shadow-2 {
+    -webkit-box-shadow: 0 10px 6px -9px #a1a1a1;
+    -moz-box-shadow: 0 10px 6px -9px #a1a1a1;
+    box-shadow: 0 10px 6px -9px #a1a1a1;
+
+}
+
+.font-exo-bold {
+    font-family: ExoBold !important;
+}
+
+.font-exo-med {
+    font-family: ExoMed !important;
+}
+
+.font-exo-light {
+    font-family: ExoLight !important;
+}
+
+.tab-active {
+    background-color: var(--main-color);
+    padding: 8px;
+    border-radius: 20px;
+    color: whitesmoke;
+}
+
+.check {
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid black;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.check-active {
+    background-color: green;
+    border: 1px solid transparent;
+}
+
+.check-not-active {
+    border: 1px solid transparent;
+
+    background-image: url("../images/minus.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: transparent !important;
+}
+
+.old-check {
+    background-color: red;
+    border: none;
+    cursor: not-allowed;
+
+}
+
+.table-tr {
+    line-height: 50px;
+}
+
+.table-td {
+    font-family: ExoBold;
+}
+
+.check-disabled {
+    background-color: #e0e0ea !important;
+    border: none;
+    cursor: not-allowed;
+}
+
+.download-excel {
+    max-width: 200px;
+    min-width: 30%;
+}
+
+.mdi-content-save-edit-outline {
+    color: var(--main-color) !important;
+    font-size: 23px !important;
+}
+
+.mdi-trash-can-outline {
+    color: var(--main-color) !important;
+    font-size: 23px !important;
+
+}
+
+.cursor-not-allowd {
+    cursor: not-allowed;
+}
+
+table td, table th{
+    white-space: nowrap;
+}
+
+.send-button{
+    margin: 20px 10px 20px auto;
+    max-width: 250px;
+}
+
+.sms-modal-textarea{
+    width: 95% !important;
+}
+
+.vertical-menu{
+    transition: .3s;
+}

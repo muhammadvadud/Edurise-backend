@@ -1,0 +1,39 @@
+{% extends "layouts/main.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header justify-content-between d-flex align-items-center">
+                            <a href="{% url "adm:edulist" %}" class="btn btn-sm main-background-color text-white"><i
+                                    class="mdi mdi-arrow-left align-middle"></i> Ortga</a>
+                            <h4 class="card-title">O'quv markazi qo'shish</h4>
+
+                        </div><!-- end card header -->
+                        <div class="card-body">
+                            <form class="needs-validation" action="" autocomplete="off" method="post">{% csrf_token %}
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row">
+                                            {{ user_form|crispy }}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            {{ form|crispy }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="btn main-background-color text-white" type="submit">Qo'shish</button>
+                            </form><!-- end form -->
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div> <!-- end col -->
+            </div>
+        </div>
+    </div>
+{% endblock content %}

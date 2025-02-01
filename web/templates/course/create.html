@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header justify-content-between d-flex align-items-center">
+                    <h4 class="card-title">Kurs qo'shish</h4>
+
+                </div><!-- end card header -->
+                <div class="card-body">
+                    <form class="needs-validation" autocomplete="off" action="{% url "courses:create" %}" method="post">{% csrf_token %}
+                        <div class="'row">
+                            {{ form|crispy }}
+                        </div>
+                        <button class="btn btn-primary main-background-color" type="submit">Qo'shish</button>
+                    </form><!-- end form -->
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div> <!-- end col -->
+    </div>
+{% endblock content %}

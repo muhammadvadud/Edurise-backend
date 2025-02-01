@@ -1,0 +1,371 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <title>Edutop | CRM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Edutop | CRM" name="description"/>
+    <meta content="IT Center Beshariq" name="author"/>
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{% static "assets/images/favicon.ico" %}">
+    <link href="{% static "assets/libs/jsvectormap/css/jsvectormap.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "assets/libs/gridjs/theme/mermaid.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "assets/css/bootstrap.min.css" %}" id="bootstrap-style" rel="stylesheet" type="text/css"/>
+    <link href="{% static "assets/css/icons.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "assets/css/app.min.css" %}" id="app-style" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="{% static "assets/css/bootstrap-datatable.css" %}">
+
+    {% block header %}
+    {% endblock header %}
+
+    <link href="{% static "assets/css/edutop.css" %}" id="app-style" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .my-alert {
+            z-index: 99999;
+            top: 15px;
+            left: 50%;
+            transform: translate(-50%);
+            animation: anime .5s ease;
+            transition: 1s;
+        }
+
+        @keyframes anime {
+            0% {
+                top: -10px
+            }
+
+            100% {
+                top: 15px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div id="my-alert"
+                 class="position-fixed alert alert-{{ message.tags }} alert-dismissible fade show my-alert main-background-color text-white"
+                 role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        <script>
+            let alert = document.querySelector("#my-alert")
+            setTimeout(() => {
+                alert.remove()
+            }, 3000)
+        </script>
+    {% endif %}
+
+    {% include "layouts/inc/sidebar.html" %}
+
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+
+
+    <div class="main-content">
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5 id="offcanvasRightLabel"></h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div id="offcanvasContent" class="offcanvas-body"></div>
+        </div>
+
+        <div class="modal fade bs-example-modal-center mt-5" tabindex="-1" aria-labelledby="mySmallModalLabel"
+             aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-dialog-centered modal-width d-flex flex-column">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="close-button" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="modalContent"></div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+        <div class="modal fade bs-example-modal-center-big" tabindex="-1" aria-labelledby="mySmallModalLabel1"
+             aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-dialog-centered modal-width" style="min-width: 75%">
+                <div class="modal-content">
+                  <div class="modal-header">
+                        <button id="close-button" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="bigModalContent"></div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+        {% block content %}
+        {% endblock content %}
+        <!-- End Page-content -->
+
+        {% include 'layouts/inc/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+</div>
+<!-- END layout-wrapper -->
+
+
+<!-- Right bar overlay-->
+<div class="rightbar-overlay"></div>
+
+
+<!-- JAVASCRIPT -->
+<script src="{% static "assets/libs/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+<script src="{% static "assets/libs/metismenujs/metismenujs.min.js" %}"></script>
+<script src="{% static "assets/libs/simplebar/simplebar.min.js" %}"></script>
+<script src="{% static "assets/libs/feather-icons/feather.min.js" %}"></script>
+<script src="{% static "assets/libs/apexcharts/apexcharts.min.js" %}"></script>
+<script src="{% static "assets/libs/jsvectormap/js/jsvectormap.min.js" %}"></script>
+<script src="{% static "assets/libs/jsvectormap/maps/world-merc.js" %}"></script>
+<script src="{% static "assets/js/pages/dashboard-sales.init.js" %}"></script>
+{#<script src="{% static "assets/libs/gridjs/gridjs.umd.js" %}"></script>#}
+{#<script src="{% static "assets/js/pages/gridjs.init.js" %}"></script>#}
+
+
+<script>
+    !function () {
+        "use strict";
+        var t = localStorage.getItem("language"), a = "en";
+
+        function n(e) {
+            document.getElementById("header-lang-img") && ("en" == e ? document.getElementById("header-lang-img").src = "{% static "assets/images/flags/us.jpg" %}" : "sp" == e ? document.getElementById("header-lang-img").src = "{% static "assets/images/flags/spain.jpg" %}" : "gr" == e ? document.getElementById("header-lang-img").src = "{% static "assets/images/flags/germany.jpg" %}" : "it" == e ? document.getElementById("header-lang-img").src = "{% static "assets/images/flags/italy.jpg" %}" : "ru" == e && (document.getElementById("header-lang-img").src = "{% static "assets/images/flags/russia.jpg" %}"), localStorage.setItem("language", e), null == (t = localStorage.getItem("language")) && n(a), (e = new XMLHttpRequest).open("GET", "/assets/lang/" + t + ".json"), e.onreadystatechange = function () {
+                var a;
+                4 === this.readyState && 200 === this.status && (a = JSON.parse(this.responseText), Object.keys(a).forEach(function (t) {
+                    document.querySelectorAll("[data-key='" + t + "']").forEach(function (e) {
+                        e.textContent = a[t]
+                    })
+                }))
+            }, e.send())
+        }
+
+        function e() {
+            var e = document.querySelectorAll(".counter-value");
+            e && e.forEach(function (s) {
+                !function e() {
+                    var t = +s.getAttribute("data-target"), a = +s.innerText, n = t / 250;
+                    n < 1 && (n = 1), a < t ? (s.innerText = (a + n).toFixed(0), setTimeout(e, 1)) : s.innerText = t
+                }()
+            })
+        }
+
+        function s() {
+            setTimeout(function () {
+                var e, t, a = document.getElementById("side-menu");
+                a && (a = a.querySelector(".mm-active .active"), 300 < (e = a ? a.offsetTop : 0) && (e -= 100, (t = document.getElementsByClassName("vertical-menu") ? document.getElementsByClassName("vertical-menu")[0] : "") && t.querySelector(".simplebar-content-wrapper") && setTimeout(function () {
+                    t.querySelector(".simplebar-content-wrapper").scrollTop = e
+                }, 0)))
+            }, 0)
+        }
+
+        function o() {
+            for (var e = document.getElementById("topnav-menu-content").getElementsByTagName("a"), t = 0, a = e.length; t < a; t++) "nav-item dropdown active" === e[t].parentElement.getAttribute("class") && (e[t].parentElement.classList.remove("active"), e[t].nextElementSibling.classList.remove("show"))
+        }
+
+        function l(e) {
+            var t = document.getElementById(e), a = (t.style.display = "block", setInterval(function () {
+                t.style.opacity || (t.style.opacity = 1), 0 < t.style.opacity ? t.style.opacity -= .2 : (clearInterval(a), t.style.display = "none")
+            }, 200))
+        }
+
+        function i() {
+            var e, t;
+            feather.replace(), window.sessionStorage && ((e = sessionStorage.getItem("is_visited")) ? null !== (t = document.querySelector("#" + e)) && (t.checked = !0, t = e, 1 == document.getElementById("layout-direction-ltr").checked && "layout-direction-ltr" === t ? (document.getElementsByTagName("html")[0].removeAttribute("dir"), document.getElementById("layout-direction-rtl").checked = !1, document.getElementById("bootstrap-style").setAttribute("href", "{% static "assets/css/bootstrap.min.css" %}"), document.getElementById("app-style").setAttribute("href", "{% static "assets/css/app.min.css" %}"), sessionStorage.setItem("is_visited", "layout-direction-ltr")) : 1 == document.getElementById("layout-direction-rtl").checked && "layout-direction-rtl" === t && (document.getElementById("layout-direction-ltr").checked = !1, document.getElementById("bootstrap-style").setAttribute("href", "{% static "assets/css/bootstrap-rtl.min.css" %}"), document.getElementById("app-style").setAttribute("href", "{% static "assets/css/app-rtl.min.css" %}"), document.getElementsByTagName("html")[0].setAttribute("dir", "rtl"), sessionStorage.setItem("is_visited", "layout-direction-rtl"))) : sessionStorage.setItem("is_visited", "layout-direction-ltr"))
+        }
+
+        function r(e) {
+            document.getElementById(e) && (document.getElementById(e).checked = !0)
+        }
+
+        window.onload = function () {
+            document.getElementById("preloader") && (l("pre-status"), l("preloader"))
+        }, i(), document.addEventListener("DOMContentLoaded", function (e) {
+            document.getElementById("side-menu") && new MetisMenu("#side-menu")
+        }), e();
+        for (var d, c, u, m = document.body.getAttribute("data-sidebar-size"), g = (window.onload = function () {
+            1024 <= window.innerWidth && window.innerWidth <= 1366 && (document.body.setAttribute("data-sidebar-size", "sm"), r("sidebar-size-small"))
+        }, document.getElementsByClassName("vertical-menu-btn")), b = 0; b < g.length; b++) g[d = b] && g[d].addEventListener("click", function (e) {
+            e.preventDefault(), document.body.classList.toggle("sidebar-enable"), 992 <= window.innerWidth ? null == m ? null == document.body.getAttribute("data-sidebar-size") || "lg" == document.body.getAttribute("data-sidebar-size") ? document.body.setAttribute("data-sidebar-size", "sm") : document.body.setAttribute("data-sidebar-size", "lg") : "md" == m ? "md" == document.body.getAttribute("data-sidebar-size") ? document.body.setAttribute("data-sidebar-size", "sm") : document.body.setAttribute("data-sidebar-size", "md") : "sm" == document.body.getAttribute("data-sidebar-size") ? document.body.setAttribute("data-sidebar-size", "lg") : document.body.setAttribute("data-sidebar-size", "sm") : s()
+        });
+
+        function y() {
+            document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.body.classList.remove("fullscreen-enable")
+        }
+
+        if (setTimeout(function () {
+            var e = document.querySelectorAll("#sidebar-menu a");
+            e && e.forEach(function (e) {
+                var t = window.location.href.split(/[?#]/)[0];
+                e.href == t && (e.classList.add("active"), (t = e.parentElement) && "side-menu" !== t.id && (t.classList.add("mm-active"), (e = t.parentElement) && "side-menu" !== e.id && (e.classList.add("mm-show"), e.classList.contains("mm-collapsing") && console.log("has mm-collapsing"), (t = e.parentElement) && "side-menu" !== t.id && (t.classList.add("mm-active"), (e = t.parentElement) && "side-menu" !== e.id && (e.classList.add("mm-show"), (t = e.parentElement) && "side-menu" !== t.id && t.classList.add("mm-active"))))))
+            })
+        }, 0), (u = document.querySelectorAll(".navbar-nav a")) && u.forEach(function (e) {
+            var t = window.location.href.split(/[?#]/)[0];
+            e.href == t && (e.classList.add("active"), (t = e.parentElement) && (t.classList.add("active"), (e = t.parentElement).classList.add("active"), (t = e.parentElement) && (t.classList.add("active"), (e = t.parentElement) && (e.classList.add("active"), (t = e.parentElement) && (t.classList.add("active"), (e = t.parentElement) && e.classList.add("active"))))))
+        }), (u = document.querySelector('[data-toggle="fullscreen"]')) && u.addEventListener("click", function (e) {
+            e.preventDefault(), document.body.classList.toggle("fullscreen-enable"), document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement ? document.cancelFullScreen ? document.cancelFullScreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitCancelFullScreen && document.webkitCancelFullScreen() : document.documentElement.requestFullscreen ? document.documentElement.requestFullscreen() : document.documentElement.mozRequestFullScreen ? document.documentElement.mozRequestFullScreen() : document.documentElement.webkitRequestFullscreen && document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)
+        }), document.addEventListener("fullscreenchange", y), document.addEventListener("webkitfullscreenchange", y), document.addEventListener("mozfullscreenchange", y), document.getElementById("topnav-menu-content")) {
+            for (var h = document.getElementById("topnav-menu-content").getElementsByTagName("a"), p = 0, E = h.length; p < E; p++) h[p].onclick = function (e) {
+                "#" === e.target.getAttribute("href") && (e.target.parentElement.classList.toggle("active"), e.target.nextElementSibling.classList.toggle("show"))
+            };
+            window.addEventListener("resize", o)
+        }
+        [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).map(function (e) {
+            return new bootstrap.Tooltip(e)
+        }), [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')).map(function (e) {
+            return new bootstrap.Popover(e)
+        }), [].slice.call(document.querySelectorAll(".toast")).map(function (e) {
+            return new bootstrap.Toast(e)
+        }), "null" != t && t !== a && n(t), (u = document.getElementsByClassName("language")) && u.forEach(function (t) {
+            t.addEventListener("click", function (e) {
+                n(t.getAttribute("data-lang"))
+            })
+        }), c = document.body, document.getElementById("right-bar-toggle").addEventListener("click", function (e) {
+            c.classList.toggle("right-bar-enabled")
+        }), c.addEventListener("click", function (e) {
+            !e.target.parentElement.classList.contains("right-bar-toggle-close") && e.target.closest(".right-bar-toggle, .right-bar") || document.body.classList.remove("right-bar-enabled")
+        }), (c = document.getElementsByTagName("body")[0]).hasAttribute("data-layout") && "horizontal" == c.getAttribute("data-layout") ? (r("layout-horizontal"), document.getElementById("sidebar-setting").style.display = "none") : r("layout-vertical"), c.hasAttribute("data-layout-mode") && "dark" == c.getAttribute("data-layout-mode") ? r("layout-mode-dark") : r("layout-mode-light"), c.hasAttribute("data-layout-size") && "boxed" == c.getAttribute("data-layout-size") ? r("layout-width-boxed") : r("layout-width-fluid"), c.hasAttribute("data-layout-scrollable") && "true" == c.getAttribute("data-layout-scrollable") ? r("layout-position-scrollable") : r("layout-position-fixed"), c.hasAttribute("data-topbar") && "dark" == c.getAttribute("data-topbar") ? r("topbar-color-dark") : r("topbar-color-light"), c.hasAttribute("data-sidebar-size") && "sm" == c.getAttribute("data-sidebar-size") ? r("sidebar-size-small") : c.hasAttribute("data-sidebar-size") && "md" == c.getAttribute("data-sidebar-size") ? r("sidebar-size-compact") : r("sidebar-size-default"), c.hasAttribute("data-sidebar") && "brand" == c.getAttribute("data-sidebar") ? r("sidebar-color-brand") : c.hasAttribute("data-sidebar") && "dark" == c.getAttribute("data-sidebar") ? r("sidebar-color-dark") : r("sidebar-color-light"), document.getElementsByTagName("html")[0].hasAttribute("dir") && "rtl" == document.getElementsByTagName("html")[0].getAttribute("dir") ? r("layout-direction-rtl") : r("layout-direction-ltr"), document.querySelectorAll("input[name='layout']").forEach(function (e) {
+            e.addEventListener("change", function (e) {
+                e && e.target && e.target.value && (window.location.href = "vertical" == e.target.value ? "index.html" : "layouts-horizontal.html")
+            })
+        }), document.querySelectorAll("input[name='layout-mode']").forEach(function (e) {
+            e.addEventListener("change", function (e) {
+                e && e.target && e.target.value && ("light" == e.target.value ? (document.body.setAttribute("data-layout-mode", "light"), document.body.setAttribute("data-topbar", "light"), document.body.setAttribute("data-sidebar", "light"), c.hasAttribute("data-layout") && "horizontal" == c.getAttribute("data-layout") || document.body.setAttribute("data-sidebar", "light"), r("topbar-color-light"), r("sidebar-color-light")) : (document.body.setAttribute("data-layout-mode", "dark"), document.body.setAttribute("data-topbar", "dark"), document.body.setAttribute("data-sidebar", "dark"), c.hasAttribute("data-layout") && "horizontal" == c.getAttribute("data-layout") || document.body.setAttribute("data-sidebar", "dark"), r("topbar-color-dark"), r("sidebar-color-dark")))
+            })
+        }), document.querySelectorAll("input[name='layout-direction']").forEach(function (e) {
+            e.addEventListener("change", function (e) {
+                e && e.target && e.target.value && ("ltr" == e.target.value ? (document.getElementsByTagName("html")[0].removeAttribute("dir"), document.getElementById("bootstrap-style").setAttribute("href", "{% static "assets/css/bootstrap.min.css" %}"), document.getElementById("app-style").setAttribute("href", "{% static "assets/css/app.min.css" %}"), sessionStorage.setItem("is_visited", "layout-direction-ltr")) : (document.getElementById("bootstrap-style").setAttribute("href", "{% static "assets/css/bootstrap-rtl.min.css" %}"), document.getElementById("app-style").setAttribute("href", "{% static "assets/css/app-rtl.min.css" %}"), document.getElementsByTagName("html")[0].setAttribute("dir", "rtl"), sessionStorage.setItem("is_visited", "layout-direction-rtl")))
+            })
+        }), s(), (u = document.getElementById("checkAll")) && (u.onclick = function () {
+            for (var e = document.querySelectorAll('.table-check input[type="checkbox"]'), t = 0; t < e.length; t++) e[t].checked = this.checked
+        })
+    }();
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('.show-modal').click(function () {
+            var url = $(this).attr('url');
+            let minWidth = $(this).attr("min-width");
+            let isRefresh = $(this).attr("is-refresh");
+            if (isRefresh){
+                $("#close-button").click(function (){
+                    console.log("press")
+                    window.location.reload();
+                })
+            
+            }
+
+            if (minWidth){
+                $(".modal-width").each(function(){
+                    $(this).css("min-width",`${minWidth}vw`);
+                })
+            }
+            $.ajax({
+                url: url,
+                success: function (response) {
+                    $('#modalContent').html(response);
+                }
+            });
+        });
+
+
+        $('.show-big-modal').click(function () {
+            var url = $(this).attr('url');
+             $.ajax({
+                url: url,
+                success: function (response) {
+                    $('#bigModalContent').html(response);
+                }
+            });
+        });
+
+        $('.show-offcanvas').click(function () {
+            var url = $(this).attr('url');
+            $.ajax({
+                url: url,
+                success: function (response) {
+                    $('#offcanvasContent').html(response);
+                }
+            });
+        });
+
+        $('.add-student').click(function () {
+            var url = $(this).attr('url');
+            var user = $(this).attr('user');
+            $.ajax({
+                method: 'POST',
+                url: url,
+                data: {
+                    'user': user,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    if (response === "OK"){
+                        $(`#group-user-${user}`).remove()
+
+                    }
+                },
+            });
+        });
+
+
+    });
+</script>
+    <script src="{% static "assets/js/datatable.js" %}"></script>
+    <script src="{% static "assets/js/bootstrap-datatable.js" %}"></script>
+<script>
+  $(document).ready(function () {
+            $('#datatable').DataTable({
+             language: {
+                searchPlaceholder: "Matinni kiriting",
+                search:"Qidirish: ",
+                info: "_TOTAL_ ta yozuvdan _START_ dan _END_ gacha koʻrsatilmoqda",
+                infoEmpty: "Malumot yo'q",
+                lengthMenu: "_MENU_ yozuvlarini ko'rsatish",
+                loadingRecords: "Kuting...",
+                zeroRecords:    "Hech qanday malumot yo'q",
+                paginate: {
+                    "first":      "Birinchi",
+                    "last":       "Oxirgi",
+                    "next":       "Keyingisi",
+                    "previous":   "Oldingi"
+                 },
+        }});
+        });
+</script>
+
+
+ <link href="{% static "assets/css/edutop-after.css" %}" id="app-style" rel="stylesheet" type="text/css"/>
+
+
+{% block footer %}
+{% endblock footer %}
+
+</body>
+
+
+</html>

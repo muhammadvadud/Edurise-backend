@@ -1,0 +1,74 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow-2">
+                        <div class="card-header justify-content-between d-flex align-items-center mb-5">
+                            <h4 class="card-title">Lidlar</h4>
+                            <a url="{% url "registration:create" %}" class="btn btn-sm btn-success show-offcanvas main-background-color"
+                               data-bs-toggle="offcanvas"
+                               data-bs-target="#offcanvasRight">Qo'shish <i
+                                    class="mdi mdi-arrow-right align-middle"></i></a>
+                        </div><!-- end card header -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mb-0" id="datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>FIO</th>
+                                        <th>Telefon</th>
+                                        <th>Jinsi</th>
+                                        <th>Tug'ulgan kuni</th>
+                                        <th>Kurs</th>
+                                        <th>Bo'sh vaqti</th>
+                                        <th>Ro'yhatga olingan</th>
+                                        <th>#</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for r in registration %}
+                                        <tr>
+                                            <th scope="row">{{ r.first_name }} {{ r.last_name }}</th>
+                                            <td><a href="tel:{{ r.phone }}">{{  r.phone }}</a></td>
+                                            <td>{{ r.gender }}</td>
+                                            <td>{{ r.birth_day }}</td>
+                                            <td>{{ r.course.name }}</td>
+                                            <td>{{ r.days }}</td>
+                                            <td>{{ r.created_at }}</td>
+                                            <td class="align-items-center d-flex">
+                                                <a type="button" class="show-modal"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target=".bs-example-modal-center"
+                                                   url="{% url "registration:delete" pk=r.id %}">
+                                                    <i class="mdi mdi-trash-can-outline align-middle fs-4 text-danger p-0 m-0"></i>
+                                                </a>
+                                                <a type="button" class="show-offcanvas"
+                                                   data-bs-toggle="offcanvas"
+                                                   data-bs-target="#offcanvasRight"
+                                                   url="{% url "registration:edit" pk=r.id %}">
+                                                    <i class="mdi mdi-content-save-edit-outline fs-4 text-primary ms-2"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table><!-- end table -->
+                            </div><!-- end table responsive -->
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+        </div> <!-- container-fluid -->
+    </div>
+{% endblock content %}

@@ -1,0 +1,75 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+
+
+
+
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow-2">
+                        <div class="card-header justify-content-between d-flex align-items-center mb-5">
+                            <h4 class="card-title">Xodimlar</h4>
+                            <a url="{% url "Employee:create" %}"
+                               class="btn btn-sm btn-success show-offcanvas main-background-color"
+                               data-bs-toggle="offcanvas"
+                               data-bs-target="#offcanvasRight">Qo'shish <i
+                                    class="mdi mdi-arrow-right align-middle"></i></a>
+                        </div><!-- end card header -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mb-0" id="datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>FIO</th>
+                                        <th>Role</th>
+                                        <th>Telefon</th>
+                                        <th>Username</th>
+                                        <th>Jinsi</th>
+                                        <th>#</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for object in object_list %}
+                                        <tr>
+                                            <th scope="row">{{ object.first_name }} {{ object.last_name }}</th>
+                                            <td>{% getUserRole object.role %}</td>
+                                            <td><a href="tel:+{{ object.phone }}">{{ object.phone }}</a></td>
+                                            <td>{{ object.username }}</td>
+                                            <td>{{ object.gender }}</td>
+                                            <td class="align-items-center d-flex">
+                                                <a type="button" class="show-modal"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target=".bs-example-modal-center"
+                                                   url="{% url "Employee:delete" pk=object.id %}">
+                                                    <i class="mdi mdi-trash-can-outline align-middle fs-4 text-danger p-0 m-0"></i>
+                                                </a>
+                                                <a type="button" class="show-offcanvas"
+                                                   data-bs-toggle="offcanvas"
+                                                   data-bs-target="#offcanvasRight"
+                                                   url="{% url "Employee:edit" pk=object.id %}">
+                                                    <i class="mdi mdi-content-save-edit-outline fs-4 text-primary ms-2"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table><!-- end table -->
+                            </div><!-- end table responsive -->
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+        </div> <!-- container-fluid -->
+    </div>
+{% endblock content %}

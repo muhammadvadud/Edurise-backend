@@ -1,0 +1,86 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow-2">
+                        <div class="card-header d-flex mb-5">
+
+                            <h4 class="card-title me-auto">Guruhlar ro'yhati</h4>
+
+                            <a href="?to=excel"
+                               class="btn text-white main-background-color  ms-auto btn-sm
+                                text-center">
+                                Excelda yuklash
+                            </a>
+
+                            <a url="{% url "groups:create" %}"
+                               class="btn text-white show-offcanvas ms-2 ms-md-5 btn-sm main-background-color"
+                               data-bs-toggle="offcanvas"
+                               data-bs-target="#offcanvasRight">
+                                Qo'shish <i class="mdi mdi-arrow-right align-middle"></i>
+                            </a>
+
+                        </div><!-- end card header -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mb-0" id="datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>Nomi</th>
+                                        <th>O'qituvchi</th>
+                                        <th>Kurs</th>
+                                        <th>Xona</th>
+                                        <th>Kunlar</th>
+                                        <th>Dars vaqti</th>
+                                        <th>Narxi</th>
+                                        <th>O'quvchilar</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for group in groups %}
+                                        <tr>
+                                            <th scope="row"><a
+                                                    class="a-href"
+                                                    href="{% url "groups:detail" pk=group.id %}">{{ group.name }}</a>
+                                            </th>
+                                            <td><a href="{% url "accounts:teacher" pk=group.teacher.id %}"
+                                                   class="a-href">{{ group.teacher.last_name }} {{ group.teacher.first_name }}</a>
+                                            </td>
+                                            <td>{{ group.course.name }}</td>
+                                            <td>{{ group.room.name }}</td>
+                                            <td>{{ group.days }}</td>
+                                            <td>{{ group.starting_time }}</td>
+                                            <td>{{ group.price }}</td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        {{ group.users.count }}
+                                                    </div>
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table><!-- end table -->
+                            </div><!-- end table responsive -->
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+        </div> <!-- container-fluid -->
+    </div>
+{% endblock content %}

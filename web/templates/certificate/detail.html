@@ -1,0 +1,243 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+{% load static %}
+
+
+
+{% block content %}
+
+    <div class="page-content">
+        <div class="container-fluid">
+            <h1 class="detail_heading fs-2">{{ group.name }}<span class="fs-3"></span></h1>
+            <div class="row mt-4">
+
+                <div class="col-12 col-md-12 col-lg-3 col-xl-3">
+                    <div class="card shadow-default">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1 group_box">{{ group.course.name }}</h5>
+
+                            <a type="button" class="show-modal mt-4"
+                               data-bs-toggle="modal"
+                               data-bs-target=".bs-example-modal-center"
+                               url="{% url "groups:addStudent" pk=group.id %}"
+                               min-width="65"
+                               is-refresh="true">
+                                <i class="fas fa-user-plus align-middle fs-4 main-color p-0 m-0"></i>
+                            </a>
+
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Guruh: </p>
+                                <p class="card-text course_name-span">{{ group.name }}</p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">O'qituvchi: </p>
+                                <p class="card-text course_name-span">{{ group.teacher.first_name }} {{ group.teacher.last_name }} </p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Narxi: </p>
+                                <p class="card-text course_name-span">{{ object.price }}</p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Xona: </p>
+                                <p class="card-text course_name-span">{{ group.room.name }}</p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Sanasi: </p>
+                                <p class="card-text course_name-span">{{ group.starting_day.isoformat }}
+                                    -- {% addMonth group.starting_day group.course.month_duration %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-12 col-lg-9 col-xl-9">
+                    <div>
+                        <div class="card shadow-default">
+
+                            <div class="card-body">
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#journal" role="tab"
+                                           aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                            <span class="d-none d-sm-block">Davomat</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#profile1" role="tab"
+                                           aria-selected="false" tabindex="-1">
+                                            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                            <span class="d-none d-sm-block">O'quvchilar</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#messages1" role="tab"
+                                           aria-selected="false" tabindex="-1">
+                                            <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                            <span class="d-none d-sm-block">Messages</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#settings1" role="tab"
+                                           aria-selected="false" tabindex="-1">
+                                            <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                                            <span class="d-none d-sm-block">Settings</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content p-3 text-muted">
+                                    <div class="tab-pane active" id="journal" role="tabpanel">
+                                        {% if students %}
+                                            <div>
+                                                <div class="justify-content-between d-flex row mb-4 mt-2">
+                                                    <h4 class="font-exo-bold col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        Davomat</h4>
+                                                    <div class="justify-content-end d-flex align-items-center col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 overflow-auto row">
+                                                        {% for month in months %}
+                                                            <a href="?month={{ month }}" style="white-space: nowrap"
+                                                               class="a-href col-4 mt-2 col-sm-3 col-md-1 col-lg-1 text-center col-xl-1 font-exo-light me-4 {% if month == m %}tab-active{% endif %}">{{ month }}</a>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                <div class="overflow-scroll pb-5">
+                                                    <table>
+                                                        <thead class="border-bottom">
+                                                        <tr>
+                                                            <td>Ism</td>
+                                                            {% for day in days %}
+                                                                <td class="text-center">{{ day }} {{ month_name }}</td>
+                                                            {% endfor %}
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for student in students %}
+                                                            <tr class="table-tr">
+                                                                <td class=
+
+                                                                            "table-td"
+                                                                    style="min-width: 150px;white-space: nowrap">{{ student.first_name }} {{ student.last_name }}</td>
+                                                                {% for day in days %}
+                                                                    <td>
+                                                                    {% if month_number < today.month %}
+                                                                            <div class="check {% JournalCheck group.id student.id month_name day True %}"></div>
+                                                                    {% else %}
+                                                                        {% if day <= today.day and month_number == today.month %}
+                                                                            <div id="journal-{{ student.id }}-{{ day }}" class="check {% JournalCheck group.id student.id month_name day %}" onclick="journalHandler({{ student.id }},{{ group.id }},'{{ month_name }}',{{ day }})"></div>
+                                                                        {% else %}
+                                                                            <div id="journal-{{ student.id }}-{{ day }}" class="check check-disabled"></div>
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                    </td>
+                                                                {% endfor %}
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div>
+                                                <h2 class="text-center mt-3 main-color">O'quvchilar mavjus emas</h2>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="tab-pane" id="profile1" role="tabpanel">
+                                        <table id="datatable" class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>FIO</th>
+                                                <th>Telefon</th>
+                                                <th>#</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for student in students %}
+                                                <tr>
+                                                    <td>{{ student.first_name }} {{ student.last_name }}</td>
+                                                    <td>{{ student.phone }}</td>
+
+                                                    <td>
+                                                        <a type="button" class="show-offcanvas"
+                                                           data-bs-toggle="offcanvas"
+                                                           data-bs-target="#offcanvasRight"
+                                                           url="{% url "payments:pay" group=group.id  student=student.id %}">
+                                                            <i class="fas fa-wallet align-middle fs-5 main-color p-0 m-0"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane" id="messages1" role="tabpanel">
+                                        <p class="mb-0">
+                                            Etsy mixtape wayfarers, ethical wes anderson tofu before they
+                                            sold out mcsweeney's organic lomo retro fanny pack lo-fi
+                                            farm-to-table readymade. Messenger bag gentrify pitchfork
+                                            tattooed craft beer, iphone skateboard locavore carles etsy
+                                            salvia banksy hoodie helvetica. DIY synth PBR banksy irony.
+                                            Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh
+                                            mi whatever gluten-free carles.
+                                        </p>
+                                    </div>
+                                    <div class="tab-pane" id="settings1" role="tabpanel">
+                                        <p class="mb-0">
+                                            Trust fund seitan letterpress, keytar raw denim keffiyeh etsy
+                                            art party before they sold out master cleanse gluten-free squid
+                                            scenester freegan cosby sweater. Fanny pack portland seitan DIY,
+                                            art party locavore wolf cliche high life echo park Austin. Cred
+                                            vinyl keffiyeh DIY salvia PBR, banh mi before they sold out
+                                            farm-to-table VHS viral locavore cosby sweater, mustache readymade keffiyeh
+                                            craft.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+    </script>
+
+{% endblock content %}
+
+{% block footer %}
+
+    <script>
+        function journalHandler(student, group, month, day) {
+            $.ajax({
+                method: 'POST',
+                url: "{% url "groups:journal" %}",
+                data: {
+                    'student': student,
+                    'group': group,
+                    'day': day,
+                    'month': month,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    if (response === "REMOVE") {
+                        $(`#journal-${student}-${day}`).removeClass("check-not-active")
+                    } else if (response === "ADD") {
+                        $(`#journal-${student}-${day}`).addClass("check-not-active")
+
+                    }
+                },
+            });
+        }
+    </script>
+
+{% endblock footer %}

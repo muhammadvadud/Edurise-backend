@@ -1,0 +1,211 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+
+            <div class="mx-n4 mt-n4">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-0">
+                            <div class="card-body p-0">
+                                <div class="profile-bg position-relative overflow-hidden">
+                                    <div class="bg-overlay bg-dark bg-gradient"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card -->
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+
+            <div class="row">
+                <div class="col-xl-3" >
+                    <div class="card mt-n5">
+                        <div class="card-body text-center">
+
+                            <div class="avatar-xl mx-auto mb-4">
+                                <img src="{{ udata.photo.url }}" alt=""
+                                     class="rounded-circle img-thumbnail">
+                            </div>
+                            <h5 class="mb-1">{{ udata.first_name }} {{ udata.last_name }}</h5>
+                            <p class="text-muted"></p>
+
+                            <div><i class="fas fa-user text-muted font-size-16 align-middle me-1"></i> <span
+                                    class="align-middle">Role : <b
+                                    class="fw-semibold font-size-16">O'qituvchi</b></span></div>
+                             <div class="mt-4"><i class="fas fa-money-bill-wave text-muted font-size-16 align-middle me-1"></i> <span
+                                    class="align-middle">Jami tushum : <b
+                                    class="fw-semibold font-size-16">{% toCurrency salary_total %}</b></span></div>
+                            <div class="mt-4"><i class="fas fa-money-bill text-muted font-size-16 align-middle me-1"></i> <span
+                                    class="align-middle">Ish haqi : <b
+                                    class="fw-semibold font-size-16">{% toCurrency salary %}</b></span></div>
+
+
+                            <a type="button" class="show-modal mt-4 ms-2"
+                               data-bs-toggle="modal"
+                               data-bs-target=".bs-example-modal-center"
+                               url="{% url "teachers:delete" pk=udata.id %}">
+                                <i class="mdi mdi-trash-can-outline align-middle fs-4 p-0 m-0"></i>
+                            </a>
+                            <a type="button" class="show-offcanvas mt-4 ms-2"
+                               data-bs-toggle="offcanvas"
+                               data-bs-target="#offcanvasRight"
+                               url="{% url "teachers:edit" pk=udata.id %}">
+                                <i class="mdi mdi-content-save-edit-outline align-middle fs-4"></i>
+                            </a>
+
+
+                        </div>
+
+                    </div>
+                    <!-- end card -->
+
+
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="pb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="font-size-20 text-primary flex-shrink-0 me-3">
+                                            <i class="uil uil-key-skeleton"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h1 class="text-muted mb-1 font-size-13">ID</h1>
+                                            <h5 class="mb-0 font-size-14">{{ udata.id }}</h5>
+                                        </div>
+                                    </div>
+                                </li>
+                                 <li class="pb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="font-size-20 text-primary flex-shrink-0 me-3">
+                                            <i class="uil uil-money-stack"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h1 class="text-muted mb-1 font-size-13">Oyligi</h1>
+                                            <h5 class="mb-0 font-size-14">{{ teacher_data.salary }}% </h5>
+                                        </div>
+                                    </div>
+                                </li>
+                                     <li class="pb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="font-size-20 text-primary flex-shrink-0 me-3">
+                                            <i class="uil uil-directions"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h1 class="text-muted mb-1 font-size-13">Yo'nalishi</h1>
+                                            <h5 class="mb-0 font-size-14">{{ teacher_data.direction }}</h5>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end li -->
+                                <li class="py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="font-size-20 text-primary flex-shrink-0 me-3">
+                                            <i class="uil uil-phone"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h1 class="text-muted mb-1 font-size-13">Telefon</h1>
+                                            <h5 class="mb-0 font-size-14">{{ udata.phone }}</h5>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="font-size-20 text-primary flex-shrink-0 me-3">
+                                            <i class="uil uil-star"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h1 class="text-muted mb-1 font-size-13">Status</h1>
+                                            <h5 class="mb-0 font-size-14">{{ udata.status }}</h5>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end li -->
+                                <li class="py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="font-size-20 text-primary flex-shrink-0 me-3">
+                                            <i class="uil uil-calender"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h1 class="text-muted mb-1 font-size-13">Tug'ulgan kuni</h1>
+                                            <h5 class="mb-0 font-size-14">{{ udata.birth_day }}</h5>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+
+                </div>
+                <!-- end col -->
+
+                <div class="col-xl-9" >
+                    <div class="mt-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Guruhlari</h5>
+                                        <div class="table-responsive">
+                                            <table class="table mb-0">
+                                                <thead>
+                                                <tr>
+                                                    <th>Nomi</th>
+                                                    <th>O'qituvchi</th>
+                                                    <th>Kurs</th>
+                                                    <th>Xona</th>
+                                                    <th>Kunlar</th>
+                                                    <th>Dars vaqti</th>
+                                                    <th>Narxi</th>
+                                                    <th>O'quvchilar</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for group in groups %}
+                                                    <tr>
+                                                        <th scope="row"><a
+                                                                class="a-href"
+                                                                href="{% url "groups:detail" pk=group.id %}">{{ group.name }}</a>
+                                                        </th>
+                                                        <td>{{ group.teacher_data.last_name }} {{ group.teacher_data.first_name }}</td>
+                                                        <td>{{ group.course.name }}</td>
+                                                        <td>{{ group.room.name }}</td>
+                                                        <td>{{ group.days }}</td>
+                                                        <td>{{ group.starting_time }}</td>
+                                                        <td>{{ group.price }}</td>
+                                                        <td>
+                                                            <div class="row">
+                                                                <div class="col text-center">
+                                                                    {{ group.users.count }}
+                                                                </div>
+                                                            </div>
+
+                                                        </td>
+
+                                                    </tr>
+                                                {% endfor %}
+
+                                                </tbody>
+                                            </table><!-- end table -->
+                                        </div><!-- end table responsive -->
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                            </div>
+
+                        </div><!-- end row -->
+                    </div>
+                </div><!-- end col -->
+            </div><!-- end row -->
+
+        </div> <!-- container-fluid -->
+    </div>
+    {% include "layouts/inc/mask.html" %}
+{% endblock content %}

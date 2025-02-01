@@ -1,0 +1,30 @@
+{% extends "layouts/main.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header justify-content-between d-flex align-items-center">
+                        <a href="{% url "education:list" %}" class="btn btn-sm main-background-color text-white"><i
+                                class="mdi mdi-arrow-left align-middle"></i> Ortga</a>
+                        <h4 class="card-title">Filial qo'shish</h4>
+
+                    </div><!-- end card header -->
+                    <div class="card-body">
+                        <form class="needs-validation" autocomplete="off" action="" method="post">{% csrf_token %}
+                            <div class="row">
+                                {{ form|crispy }}
+                                {{ user_form|crispy }}
+                            </div>
+                            <button class="btn main-background-color text-white" type="submit">Qo'shish</button>
+                        </form><!-- end form -->
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div> <!-- end col -->
+        </div>
+    </div>
+</div>
+{% endblock content %}

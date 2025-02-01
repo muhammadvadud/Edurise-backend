@@ -1,0 +1,55 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow-2">
+                        <div class="card-header justify-content-between d-flex align-items-center">
+
+                            <h4 class="card-title">Sozlamalar</h4>
+
+                               <a url="{% url "settings:edit" %}" class="btn btn-sm btn-success show-modal main-background-color"
+                               data-bs-toggle="modal"
+                               data-bs-target=".bs-example-modal-center">O'zgartirish <i
+                                    class="mdi mdi-arrow-right align-middle"></i></a>
+                        </div><!-- end card header -->
+                        <div class="card-body">
+                            <div id="table-search" class="table">
+                                <div role="complementary" class="gridjs gridjs-container" style="width: 100%;">
+
+                                    <div class="gridjs-wrapper" style="height: auto;">
+                                        <table role="grid" class="gridjs-table" style="height: auto;">
+
+                                            <tbody class="gridjs-tbody">
+                                            <tr class="gridjs-tr">
+                                                <td data-column-id="name" class="gridjs-td">Nomi</td>
+                                                <td data-column-id="email" class="gridjs-td">{{ data.name }}</td>
+                                            </tr>
+
+                                            <tr class="gridjs-tr">
+                                                <td data-column-id="name" class="gridjs-td">Logo</td>
+                                                <td data-column-id="email" class="gridjs-td">{{ data.logo }}</td>
+                                            </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div id="gridjs-temp" class="gridjs-temp"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

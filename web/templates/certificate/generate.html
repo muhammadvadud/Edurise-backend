@@ -1,0 +1,110 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+
+{% block content %}
+<style>
+    .select-input{
+        min-width: 100px;
+        min-height: 30px;
+        text-align:center;
+    }
+</style>
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow-2">
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mb-0" id="datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>FIO</th>
+                                        <th>Telefon</th>
+                                        <th>Jinsi</th>
+                                        <th>Tug'ulgan kuni</th>
+                                        <th>Certifikat turi</th>
+                                        <th>#</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for student in students %}
+                                        <tr>
+                                            <th scope="row"><a
+                                                    class="a-href"
+                                                    href="{% url "accounts:student" pk=student.id %}">{{ student.first_name }} {{ student.last_name }}</a>
+                                            </th>
+                                            <td>{{ student.phone }}</td>
+                                            <td>{{ student.gender }}</td>
+                                            <td>{{ student.birth_day }}</td>
+                                            <td>
+                                                <select class="select-input" name="type" id="certificate-{{ student.id }}">
+                                                    {% for certificate in certificates %}
+                                                    <option value="certificate-{{ certificate.id }}">{{ certificate.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                {% if group.course.id|isUserCertificate:student.id == True %}
+                                                    <span id="button-container-{{ student.id }}">
+                                                        <button onclick="generateCertificate({{ student.id }})"
+                                                                class="btn btn-primary main-background-color">Yaratish
+                                                        </button>
+                                                    </span>
+                                                {% else %}
+                                                    {% with group.course.id|userCertificate:student.id as data %}
+                                                        <a target="_blank" href="{{ data.certificate.url }}"
+                                                           class="btn btn-success">Yuklab olish
+                                                        </a>
+                                                    {% endwith %}
+                                                {% endif %}
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table><!-- end table -->
+                            </div><!-- end table responsive -->
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+        </div> <!-- container-fluid -->
+    </div>
+
+
+{% endblock content %}
+
+{% block footer %}
+    <script>
+        function generateCertificate(student) {
+            let certificate_type = $(`#certificate-${student}`);
+            certificate_type = certificate_type.val().split("-")[1];
+            $.ajax({
+                method: "POST",
+                url: "{% url "certificate:generate" group=group.id %}",
+                data: {
+                    "student": student,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    certificate_type: certificate_type,
+                },
+                success: function (data) {
+                    if (data.success === true){
+                        $(`#button-container-${student}`).html(`<a target="_blank" href="${data.url}"
+                                                           class="btn btn-success">Yuklab olish
+                                                        </a>`)
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock footer %}

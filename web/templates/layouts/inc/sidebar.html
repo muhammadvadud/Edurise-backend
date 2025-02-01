@@ -1,0 +1,213 @@
+{% load static %}
+{% load helpers %}
+
+
+<header id="page-topbar" class="shadow-default">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <a href="{% url "home" %}" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="{% static "assets/images/logo1.svg" %}" alt="" height="22">
+                                </span>
+                    <span class="logo-lg">
+                                    <img src="{% static "assets/images/logo1.svg" %}" alt="" height="22">
+                                </span>
+                </a>
+
+                <a href="{% url "home" %}" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="{% static "assets/images/logo1.svg" %}" alt="" height="22">
+                                </span>
+                    <span class="logo-lg">
+                                    <img src="{% static "assets/images/logo1.svg" %}" alt="" height="22">
+                                </span>
+                </a>
+            </div>
+
+            <button type="button" class="btn btn-sm px-3 font-size-16 header-item vertical-menu-btn">
+                <i class="fa fa-fw fa-bars"></i>
+            </button>
+
+        </div>
+
+        <div class="d-flex">
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="icon-sm" data-feather="search"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                    <form class="p-2">
+                        <div class="search-box">
+                            <div class="position-relative">
+                                <input type="text" class="form-control rounded bg-light border-0"
+                                       placeholder="Izlash...">
+                                <i class="mdi mdi-magnify search-icon"></i>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item user text-start d-flex align-items-center"
+                        id="page-header-user-dropdown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="rounded-circle header-profile-user"
+                         src="{% static "assets/images/users/avatar-2.jpg" %}"
+                         alt="EduTop img">
+                    <span class="ms-2 d-none d-sm-block user-item-desc">
+                                    <span class="user-name">{{ user.first_name }}</span>
+                                    <span class="user-sub-title">{% getUserRole user.role %}</span>
+                                </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end pt-0">
+                    <div class="bg-profile p-3">
+                        <h6 class="mb-0 text-white">{{ user.first_name }}</h6>
+                        <p class="mb-0 font-size-11 text-white fw-semibold">{% getUserRole user.role %}</p>
+                    </div>
+
+                    {% if teacher %}
+                        <a class="dropdown-item"
+                           href="{% url "accounts:teacher" pk=user.id %}"><i
+                                class="mdi mdi-account-circle text-muted font-size-16 align-middle me-1"></i> <span
+                                class="align-middle">Profil</span></a>
+
+                    {% endif %}
+
+                    <a class="dropdown-item" href="{% url "logout" %}"><i
+                            class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span
+                            class="align-middle">Chiqish</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu shadow-1">
+    <div class="navbar-brand-box">
+        <a href="{% url 'home' %}" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="{% static "assets/images/fav1.svg" %}" alt="" height="30">
+                    </span>
+            <span class="logo-lg">
+                        <img src="{% static "assets/images/logo1.svg" %}" alt="" height="30">
+                        </span>
+        </a>
+
+        <a href="{% url 'home' %}" class="logo logo-light">
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-light.png" alt="" height="22">
+                    </span>
+            <span class="logo-sm">
+                        <img src="assets/images/logo-sm-light.png" alt="" height="22">
+                    </span>
+        </a>
+    </div>
+
+    {% comment %}<button type="button" class="btn btn-sm px-3 font-size-16 header-item vertical-menu-btn">
+        <i class="fa fa-fw fa-bars"></i>
+    </button>{% endcomment %}
+
+    <div data-simplebar class="sidebar-menu-scroll">
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+
+                {% if not smadmin and not madmin %}
+                    <li>
+                        <a href="{% url "home" %}">
+                            <i class="mdi mdi-home fs-3 me-2"></i>
+                            <span class="menu-item" data-key="t-sales">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url "registration:list" %}">
+                            <i class="mdi mdi-download-box fs-3 me-2"></i>
+                            <span class="menu-item" data-key="t-sales">Ro'yhatga olish</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url "students:list" %}">
+                            <i class="mdi mdi-school fs-3 me-2"></i>
+                            <span class="menu-item" data-key="t-sales">Talabalar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url "groups:list" %}">
+                            <i class="mdi mdi-layers-triple fs-3 me-2"></i>
+                            <span class="menu-item" data-key="t-sales">Guruhlar</span>
+                        </a>
+                    </li>
+                    {% if ceo or manager or admin or casher %}
+                        {% if not casher %}
+                            <li>
+                                <a href="{% url "teachers:list" %}">
+                                    <i class="mdi mdi-teach fs-3 me-2"></i>
+                                    <span class="menu-item" data-key="t-sales">O'qituvchilar</span>
+                                </a>
+                            </li>
+                            {% if not manager %}
+                                <li>
+                                    <a href="{% url "Employee:list" %}">
+                                        <i class="uil uil-user-exclamation fs-3 me-2"></i>
+                                        <span class="menu-item" data-key="t-sales">Xodimlar</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        <li>
+                            <a href="{% url "payments:list" %}">
+                                <i class="mdi mdi-wallet fs-3 me-2"></i>
+                                <span class="menu-item" data-key="t-sales">To'lovlar</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url "courses:list" %}">
+                            <i class="mdi mdi-diamond-stone fs-3 me-2"></i>
+                            <span class="menu-item" data-key="t-sales">Kurslar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url "rooms:list" %}">
+                            <i class="mdi mdi-door-open fs-3 me-2"></i>
+                            <span class="menu-item" data-key="t-sales">Xonalar</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if ceo %}
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow">
+                            <i class="fas fa-cogs  me-2"></i>
+                            <span class="menu-item" data-key="t-contacts">Sozlamalar</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{% url "settings:list" %}" data-key="t-user-list">Asosiy sozlamalar</a>
+                            </li>
+                            <li><a href="{% url "education:list" %}" data-key="t-user-list">Filiallar sozlamasi</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+
+
+
+                {% if smadmin or madmin %}
+                    <li>
+                        <a href="{% url "adm:edulist" %}">
+                            <i class="mdi mdi-door-open fs-3 me-2"></i>
+                            <span class="menu-item" data-key="t-sales">Edu Centers</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->

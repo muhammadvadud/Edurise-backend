@@ -1,0 +1,362 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+{% load static %}
+
+
+
+{% block content %}
+
+    <div class="modal fade sms-modal mt-5" tabindex="-1" aria-labelledby="mySmallModalLabel"
+         aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-dialog-centered modal-width d-flex flex-column sms-modal-dialog" style="max-width: 800px;">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between">
+                <p class="text-center fs-4 d-inline font-exo-bold">Sms Yuborish</p>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div>
+                    <div id="sms-modal-content" style="display: flex;justify-content: center;flex-direction: column;">
+                        <p class="ms-4 fs-6 d-inline font-exo-bold">Xabar <span class="text-danger">*</span></p>
+                        <textarea name="message" id="sms-message-body" class="sms-modal-textarea m-auto" maxlength="255" rows="5" style="border: 0.3px solid rgba(0,0,0,0.44);outline: 0.6px"></textarea>
+                        <button id="sms-send" class="btn btn-primary main-background-color send-button" style="margin-right: auto;margin-left: 20px">Yuborish</button>
+
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="page-content">
+        <div class="container-fluid">
+            <h1 class="detail_heading fs-2">{{ group.name }}<span class="fs-3"></span></h1>
+            <div class="row mt-4">
+
+                <div class="col-12 col-md-4 col-lg-4 col-xl-3">
+                    <div class="card shadow-default">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1 group_box">{{ group.course.name }}</h5>
+
+                            <a type="button" class="show-modal mt-4 ms-2"
+                               data-bs-toggle="modal"
+                               data-bs-target=".bs-example-modal-center"
+                               url="{% url "groups:addStudent" pk=group.id %}"
+                               min-width="65"
+                               is-refresh="true">
+                                <i class="fas fa-user-plus align-middle fs-4 main-color p-0 m-0"></i>
+                            </a>
+                            <a type="button" class="show-modal mt-4 ms-2"
+                               data-bs-toggle="modal"
+                               data-bs-target=".bs-example-modal-center"
+                               url="{% url "groups:delete" pk=group.id %}">
+                                <i class="mdi mdi-trash-can-outline align-middle fs-4 p-0 m-0"></i>
+                            </a>
+                            <a type="button" class="show-offcanvas mt-4 ms-2"
+                               data-bs-toggle="offcanvas"
+                               data-bs-target="#offcanvasRight"
+                               url="{% url "groups:edit" pk=group.id %}">
+                                <i class="mdi mdi-content-save-edit-outline align-middle fs-4"></i>
+                            </a>
+
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Guruh: </p>
+                                <p class="card-text course_name-span">{{ group.name }}</p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">O'qituvchi: </p>
+                                <p class="card-text course_name-span"><a class="a-href" href="{% url "accounts:teacher" pk=group.teacher.id %}">{{ group.teacher.first_name }} {{ group.teacher.last_name }} </a></p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Dars kunlari</p>
+                                <p class="card-text course_name-span">{{ group.days }}</p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Narxi: </p>
+                                <p class="card-text course_name-span">{{ group.price }} </p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Xona: </p>
+                                <p class="card-text course_name-span">{{ group.room.name }}</p>
+                            </div>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <p class="card-text course_name">Sanasi: </p>
+                                <p class="card-text course_name-span">{{ group.starting_day.isoformat }}
+                                    -- {% addMonth group.starting_day group.course.month_duration %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-8 col-lg-8 col-xl-9">
+                    <div>
+                        <div class="card shadow-default">
+
+                            <div class="card-body">
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#journal" role="tab"
+                                           aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                            <span class="d-none d-sm-block">Davomat</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#profile1" role="tab"
+                                           aria-selected="false" tabindex="-1">
+                                            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                            <span class="d-none d-sm-block">O'quvchilar</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content p-3 text-muted">
+                                    <div class="tab-pane active" id="journal" role="tabpanel">
+                                        {% if students %}
+                                            <div>
+                                                <div class="justify-content-center d-flex row mb-4 mt-2">
+
+                                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 justify-content-between d-flex row mb-4 mt-2">
+                                                        <a href="?month={{ m }}&type=journal&to=excel"
+                                                           class="btn btn-primary main-background-color m-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">Excel
+                                                            Fayilda yuklash</a>
+                                                        <a href="{% url "certificate:generate" group=group.id %}"
+                                                           class="btn btn-primary main-background-color m-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">Certificate</a>
+                                                    </div>
+                                                    <div class="justify-content-end d-flex m-auto align-items-center col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 overflow-auto row">
+                                                        {% for month in months %}
+                                                            <a href="?month={{ month }}" style="white-space: nowrap"
+                                                               class="a-href col-4 mt-2 col-sm-3 col-md-1 col-lg-1 text-center col-xl-1 font-exo-light me-4 {% if month == m %}tab-active{% endif %}">{{ month }}</a>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                <div class="overflow-scroll pb-5">
+                                                    <table>
+                                                        <thead class="border-bottom">
+                                                        <tr>
+                                                            <td>Ism</td>
+                                                            {% for day in days %}
+                                                                <td class="text-center">{{ day }} {{ month_name }}</td>
+                                                            {% endfor %}
+                                                            <td class="text-center">To'lov</td>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for student in students %}
+                                                            <tr class="table-tr">
+                                                                <td class="table-td"
+                                                                    style="min-width: 150px;white-space: nowrap"><a
+                                                                        class="a-href"
+                                                                        href="{% url "accounts:student" pk=student.id %}">{{ student.first_name }} {{ student.last_name }}</a>
+                                                                </td>
+                                                                {% for day in days %}
+                                                                    <td>
+                                                                        {% if month_number < today.month %}
+                                                                            <div class="check check-disabled {% JournalCheck group.id student.id month_name day True %}"></div>
+                                                                        {% else %}
+                                                                            {% if day <= today.day and month_number == today.month %}
+                                                                                <div id="journal-{{ student.id }}-{{ day }}"
+                                                                                     class="check {% JournalCheck group.id student.id month_name day %} {% if today.day != day %}check-disabled{% endif %}"
+                                                                                     {% if today.day == day %}onclick="journalHandler({{ student.id }},{{ group.id }},'{{ month_name }}',{{ day }})"{% endif %}></div>
+                                                                            {% else %}
+                                                                                <div id="journal-{{ student.id }}-{{ day }}"
+                                                                                     class="check check-disabled"></div>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    </td>
+                                                                {% endfor %}
+                                                                <td class="ps-4 pe-4">{% getPaymentMoney group.id student.id m %}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div>
+                                                <h2 class="text-center mt-3 main-color">O'quvchilar mavjus emas</h2>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="tab-pane" id="profile1" role="tabpanel">
+                                        <div class="justify-content-center d-flex row mb-4 mt-2">
+
+                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 justify-content-between d-flex row mb-4 mt-2">
+
+                                                <button data-bs-toggle="modal"
+                                                        data-bs-target=".sms-modal"
+                                                        class="btn btn-primary main-background-color ms-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 d-inline m-auto">
+                                                    Barchaga sms yuborish
+                                                </button>
+                                                <a href="?month={{ m }}&type=students&to=excel"
+                                                   class="btn btn-primary main-background-color ms-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 d-inline m-auto">Excel
+                                                    Fayilda yuklash</a>
+                                            </div>
+                                        </div>
+                                        <table id="datatable" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>FIO</th>
+                                            <th>Telefon</th>
+                                            <th>#</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for student in students %}
+                                            <tr>
+                                                <td><a href="{% url "accounts:student" pk=student.id %}"
+                                                       class="a-href">
+                                                       {{ student.first_name }} {{ student.last_name }}
+                                                       </a>
+                                                       </td>
+                                                <td>{{ student.phone }}</td>
+
+                                                <td style="white-space: nowrap">
+
+                                                    <a type="button" class="show-modal main-color"
+                                                       data-bs-toggle="modal"
+                                                       data-bs-target=".bs-example-modal-center"
+                                                       min-width="75"
+                                                       url="{% url "groups:studentDebt" group=group.id user=student.id %}">
+                                                        {% if  group|isDebt:student == True  %}
+                                                            <i class="fas fa-money-bill align-middle fs-4 text-danger p-0 m-0"></i>
+                                                            {% else %}
+                                                            <i class="fas fa-money-bill align-middle fs-4 text-success p-0 m-0"></i>
+                                                         {% endif %}
+                                                    </a>
+
+
+                                                    <a type="button" class="show-offcanvas ms-3"
+                                                       data-bs-toggle="offcanvas"
+                                                       data-bs-target="#offcanvasRight"
+                                                       url="{% url "payments:pay" group=group.id  student=student.id %}">
+                                                        <i class="fas fa-wallet align-middle fs-5 main-color p-0 m-0"></i>
+                                                    </a>
+                                                    <a type="button" class="show-modal ms-3"
+                                                       data-bs-toggle="modal"
+                                                       data-bs-target=".bs-example-modal-center"
+                                                       url="{% url "groups:removeStudent" group=group.id user=student.id %}">
+                                                        <i class="mdi mdi-trash-can-outline align-middle fs-4 main-color p-0 m-0"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <script>
+    </script>
+
+{% endblock content %}
+
+{% block footer %}
+
+
+
+  <script>
+        let modal = $("#sms-modal-content");
+
+        $("#sms-send").click(function(){
+
+            let message = $("#sms-message-body").val()
+
+            if (message == ""){
+                return
+            }
+
+            modal.html(`
+             <table class="m-3">
+                            <thead>
+                                <tr>
+                                    <th>F.I.O</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-list">
+
+                            </tbody>
+                        </table>
+`)
+            let users = {{ students_js|safe }};
+            let usersList = $("#users-list");
+            users.forEach(async function(el){
+                usersList.append(` <tr style='height: 50px;'>
+                                        <td>${el.last_name} ${el.first_name}</td>
+                                        <td id='user-id-${el.id}'>Kutilmoqda...</td>
+                                    </tr>`)
+            })
+
+
+            users.forEach(function(el){
+
+                $.ajax({
+                    url:"{% url "api:send_message" %}",
+                    method:"POST",
+                    data:{
+                        message:message,
+                        user:el.id,
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                    },
+                    success:function(response){
+                        let r = $(`#user-id-${el.id}`)
+
+                        if (response.success === true){
+                            r.html("<span style='color:green;'>Yuborildi</span>");
+                        }else{
+                            r.html("<span style='color:red;'>Xatolik</span>");
+                        }
+                    }
+                })
+                })
+            })
+
+
+    </script>
+
+
+
+    <script>
+        async function journalHandler(student, group, month, day) {
+            $.ajax({
+                method: 'POST',
+                url: "{% url "groups:journal" %}",
+                data: {
+                    'student': student,
+                    'group': group,
+                    'day': day,
+                    'month': month,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    if (response === "REMOVE") {
+                        $(`#journal-${student}-${day}`).removeClass("check-not-active")
+                    } else if (response === "ADD") {
+                        $(`#journal-${student}-${day}`).addClass("check-not-active")
+
+                    }
+                },
+            });
+        }
+    </script>
+
+
+{% endblock footer %}

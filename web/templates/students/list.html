@@ -1,0 +1,62 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="page-content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow-2">
+                        <div class="card-header justify-content-between d-flex align-items-center mb-5">
+                            <h4 class="card-title">O'quvchilar ro'yhati</h4>
+                            <a data-bs-toggle="offcanvas"
+                                    data-bs-target="#offcanvasRight"
+                                    url="{% url "students:create" %}"
+                                    class="btn btn-sm main-background-color text-white show-offcanvas">Qo'shish
+                                <i class="mdi mdi-arrow-right align-middle"></i></a>
+
+                        </div><!-- end card header -->
+                        <div class="card-body" >
+                            <div class="table-responsive">
+                                <table class="table mb-0" id="datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>FIO</th>
+                                        <th>Telefon</th>
+                                        <th>Jinsi</th>
+                                        <th>Tug'ulgan kuni</th>
+                                        <th>status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for student in students %}
+                                        <tr >
+                                            <th scope="row"><a href="{% url "accounts:student" pk=student.id %}"
+                                                               class="a-href">{{ student.first_name }} {{ student.last_name }}</a>
+                                            </th >
+                                            <td>{{ student.phone }}</td>
+                                            <td>{{ student.gender }}</td>
+                                            <td>{{ student.birth_day }}</td>
+                                            <td class="font-monospace fs-6 {% if student.status == "Aktiv" %}is-active{% else %}is-not-active{% endif %}">{{ student.status }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table><!-- end table -->
+                            </div><!-- end table responsive -->
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+        </div> <!-- container-fluid -->
+    </div>
+{% endblock content %}

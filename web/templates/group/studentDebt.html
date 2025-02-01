@@ -1,0 +1,53 @@
+{#{% extends "layouts/main.html" %}#}
+{% load helpers %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" >
+                <div class="card-header justify-content-between d-flex align-items-center">
+                    <h4 class="card-title">Talabaning to'lov tarixi</h4>
+                </div><!-- end card header -->
+                <div class="card-body" >
+                    <div id="table-search" class="table">
+                        <div role="complementary" class="gridjs gridjs-container" style="width: 100%;">
+                            <h3 class="font-exo-bold main-color text-center mb-3">{{ student.first_name }} {{ student.last_name }}</h3>
+                            <div class="gridjs-wrapper" style="height: auto;">
+                                <table  role="grid" class="gridjs-table" style="height: auto;">
+
+                                    <tbody class="gridjs-tbody">
+
+                                    <tr class="gridjs-tr">
+                                            <td data-column-id="name" class="gridjs-td fw-bold"> Summa</td>
+                                            <td data-column-id="name" class="gridjs-td fw-bold"> Turi</td>
+                                            <td data-column-id="name" class="gridjs-td fw-bold"> Kuni</td>
+                                            <td data-column-id="name" class="gridjs-td fw-bold"> Izoh</td>
+                                     </tr>
+                                    {% for payment in payments %}
+                                        <tr class="gridjs-tr">
+                                            <td data-column-id="email" class="gridjs-td"> {% toCurrency payment.amount %} </td>
+                                            <td data-column-id="email" class="gridjs-td"> {{ payment.type }} </td>
+                                            <td data-column-id="email" class="gridjs-td"> {{ payment.date }} </td>
+                                            <td data-column-id="email" class="gridjs-td"> {{ payment.description }} </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+
+                            <div id="gridjs-temp" class="gridjs-temp"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+
+
+{% endblock content %}

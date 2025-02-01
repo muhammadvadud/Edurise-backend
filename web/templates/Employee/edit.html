@@ -1,0 +1,23 @@
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header justify-content-between d-flex align-items-center">
+                    <h4 class="card-title">Xonani o'zgartirish</h4>
+
+                </div><!-- end card header -->
+                <div class="card-body">
+                    <form class="needs-validation" action="{% url "Employee:edit" pk=object.id %}"
+                          method="post">{% csrf_token %}
+                        {{ form|crispy }}
+                        <button class="btn btn-primary main-background-color" type="submit">Saqlash</button>
+                    </form><!-- end form -->
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div> <!-- end col -->
+    </div>
+    {% include "layouts/inc/mask.html" %}
+
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "layouts/auth.html" %}
+{% load static %}
+
+
+{% block content %}
+    <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-center py-5">
+                            <h1 class="display-1 fw-normal error-text">4<img src="{% static "assets/images/logo-sm.png" %}" alt=""
+                                    class="avatar-lg h-auto mx-2">3</h1>
+                            <h4 class="text-uppercase text-muted">Siz xafli foydalanuvchiga o'xshayapsiz bu sahifaga kirishga ruhsat yo'q</h4>
+                            <div class="mt-5 text-center">
+                                <a class="btn btn-primary" href="{% url "home" %}">Bosh sahifa</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+{% endblock content %}

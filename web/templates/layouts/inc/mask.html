@@ -1,0 +1,42 @@
+{% load static %}
+
+<script src="{% static "assets/libs/imask/imask.min.js" %}"></script>
+
+<script>
+    var el = undefined
+    el = $("[name=phone]")[0]
+    if (el) {
+        IMask(el, {
+            mask: '+{998} 00 000-00-00'
+        });
+    }
+    el = $("[name=birth_day]")[0]
+    if (el) {
+        IMask(
+            el, {
+                mask: Date,
+                min: new Date(1900, 0, 1),
+                lazy: false
+            });
+    }
+    el = $("[name=price]")[0]
+    if (el) {
+        IMask(
+            el, {
+                mask: Number,
+                min: -0,
+                max: 100000000,
+                thousandsSeparator: ' '
+            });
+    }
+
+    el = $("[name=starting_day]")[0]
+    if (el) {
+        IMask(
+            el, {
+                mask: Date,
+                min: new Date(1900, 0, 1),
+                lazy: false
+            });
+    }
+</script>

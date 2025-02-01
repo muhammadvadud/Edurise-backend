@@ -1,0 +1,66 @@
+{% extends "layouts/main.html" %}
+{% load helpers %}
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header justify-content-between d-flex align-items-center mb-5">
+                            <h4 class="card-title">O'quv markazlari ro'yhati</h4>
+                            <a href="{% url "adm:educreate" %}" class="btn btn-sm main-background-color text-white">Qo'shish <i
+                                    class="mdi mdi-arrow-right align-middle"></i></a>
+                        </div><!-- end card header -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Nomi</th>
+                                        <th>Filiallar</th>
+                                        <th>Talabalar</th>
+                                        <th>O'qituvchilar</th>
+                                        <th>Xonalar</th>
+                                        <th>#</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for educenter in educenters %}
+                                        {% with educenter.id|getEduCenter as data %}
+                                            <tr>
+                                                <th>
+                                                    <a href="{% url "adm:edulogin" pk=educenter.id %}"
+                                                       class="a-href">{{ educenter.name }}</a>
+                                                </th>
+                                                <th>{{ data.filials }}</th>
+                                                <th>{{ data.students }}</th>
+                                                <th>{{ data.teachers }}</th>
+                                                <th>{{ data.rooms }}</th>
+                                                <td class="align-items-center d-flex">
+                                                    <a href="{% url "adm:edudelete" pk=educenter.id %}"><i
+                                                            class="mdi mdi-trash-can-outline align-middle fs-4 text-danger p-0 m-0"></i></a>
+                                                    <a href="{% url "adm:eduedit" pk=educenter.id %}"><i
+                                                            class="mdi mdi-content-save-edit-outline fs-4 text-primary ms-2"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endwith %}
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table><!-- end table -->
+                            </div><!-- end table responsive -->
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+        </div> <!-- container-fluid -->
+    </div>
+{% endblock content %}
