@@ -58,7 +58,7 @@ class Certificate:
         self.filepath = f"web/media/temp/{self.filename}"
 
         self.image.paste(
-            self.get_qr("https://edusystem.uz{}".format(f"/web/media/certificates/{self.filename}")),
+            self.get_qr("http://127.0.0.1:8000{}".format(f"/web/media/certificates/{self.filename}")),
             (2200, 150),
         )
 

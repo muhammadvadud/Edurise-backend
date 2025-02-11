@@ -1,10 +1,12 @@
 from django.core.exceptions import PermissionDenied
+from accounts.models import Users  # User modelini import qilish
 
 
-class Mixin:
-
+class CeoRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
-        if request.user.educenter.parent is None:
+        print(f"User: {request.user}, Role: {request.user.role}")  # Terminalga chiqarish
+
+        if request.user.role == Users.ROLE_CEO:  # String bilan emas, raqam bilan solishtirish!
             return super().dispatch(request, *args, **kwargs)
-        else:
-            raise PermissionDenied
+
+        raise PermissionDenied("Sizda ushbu sahifaga kirish huquqi yo'q.")

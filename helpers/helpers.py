@@ -114,14 +114,14 @@ def getPaymentMoney(group, student, month):
         return toCurrency(
             len(days)
             * (
-                int(group.price.replace(" ", ""))
-                / len(
-                    getDays(
-                        today.year,
-                        getMonthNumber(month),
-                        1 if group.days == Groups.ODD_DAYS else 0,
-                    )
+                    int(group.price.replace(" ", ""))
+                    / len(
+                getDays(
+                    today.year,
+                    getMonthNumber(month),
+                    1 if group.days == Groups.ODD_DAYS else 0,
                 )
+            )
             )
         )
 

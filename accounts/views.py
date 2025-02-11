@@ -36,29 +36,31 @@ class ProfilePageView(View):
 
 
 class TeacherProfilePageView(View):
-
     def get(self, request, pk):
         user = get_object_or_404(Users, id=pk)
 
-        if user.role != Users.ROLE_TEACHER:
-            raise Http404
+        # User roli va educenterni tekshirish
+        # if user.role != Users.ROLE_TEACHER:
+        #     raise Http404("Foydalanuvchi o'qituvchi emas")
+        #
+        # if user.educenter != request.user.educenter:
+        #     raise Http404("Bu o'qituvchi sizning edukatsiya markaziga tegishli emas")
 
-        if user.educenter != request.user.educenter:
-            raise Http404
-
+        # Guruhlar va o'qituvchi ma'lumotlarini olish
         groups = Groups.objects.filter(teacher=user)
-        teacher = get_object_or_404(Teachers, user=pk)
+        teacher = get_object_or_404(Teachers, user=user)
+
         today = datetime.today()
-        salary = 0
+        salary_total = 0
+
+        # Maoshni hisoblash
         for group in groups:
-            payments = Payments.objects.filter(
-                group=group, date__month=today.month
-            )
+            payments = Payments.objects.filter(group=group, date__month=today.month)
             for payment in payments:
-                salary += payment.amount
-        salary_total = salary
-        salary = salary // 100
-        salary = int(salary) * int(teacher.salary)
+                salary_total += payment.amount
+
+        # Maoshni hisoblash: maoshni summasi + o'qituvchining maoshi
+        salary = (salary_total // 100) * int(teacher.salary) if teacher.salary else 0
 
         context = {
             "udata": user,
@@ -67,6 +69,5 @@ class TeacherProfilePageView(View):
             "salary": salary,
             "salary_total": salary_total,
         }
-        return render(
-            request, "registration/teacher_profile.html", context=context
-        )
+
+        return render(request, "registration/teacher_profile.html", context=context)

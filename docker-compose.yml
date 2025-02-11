@@ -1,21 +1,17 @@
-version: '3.11'
-
 services:
-  web:
-    build: .
-    command: "sh ./entrypoint.sh"
+  bot:
+    build:
+      context: .
+    volumes:
+      - .:/code
+      - sqlite_data:/code/db
     ports:
-      - "8082:8000"
-    volumes:
-      - "./:/code"
-  db:
-    image: postgres:16
-    environment:
-      - POSTGRES_PASSWORD=2309
-      - POSTGRES_DB=django
-      - POSTGRES_USER=postgres
-    volumes:
-      - "pgdata:/var/lib/postgresql/data"
+      - "8088:8000"
+    command: |
+      bash -c "
+        python3 manage.py runserver 0.0.0.0:8088 & 
+        wait
+      "
 
 volumes:
-  pgdata: null
+  sqlite_data:

@@ -79,9 +79,9 @@ class CreateViewPage(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        eduid = self.request.user.educenter.parent
+        eduid = self.request.user.educenter.id
         if eduid is None:
-            eduid = self.request.user.educenter.id
+            eduid = self.request.user.educenter.parent
 
         data["form"].fields["starting_time"].widget = widgets.TimeInput(
             attrs={"type": "time"}
@@ -121,8 +121,8 @@ class DeleteViewPage(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Groups, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Groups, id=id).educenter
+                == self.request.user.educenter
         )
 
     def form_valid(self, form):
@@ -151,15 +151,15 @@ class EditViewPage(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Groups, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Groups, id=id).educenter
+                == self.request.user.educenter
         )
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        eduid = self.request.user.educenter.parent
+        eduid = self.request.user.educenter.id
         if eduid is None:
-            eduid = self.request.user.educenter.id
+            eduid = self.request.user.educenter.parent
 
         data["form"].fields["course"].queryset = Courses.objects.filter(
             educenter=eduid
@@ -196,8 +196,8 @@ class AddStudentViewPage(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Groups, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Groups, id=id).educenter
+                == self.request.user.educenter
         )
 
     def post(self, request, pk):
@@ -259,8 +259,8 @@ class RemoveStudentViewPage(View):
     def test_func(self):
         id = self.kwargs["group"]
         return (
-            get_object_or_404(Groups, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Groups, id=id).educenter
+                == self.request.user.educenter
         )
 
     def post(self, request, group, user):
@@ -292,8 +292,8 @@ class StudentDebtViewPage(View):
     def test_func(self):
         id = self.kwargs["group"]
         return (
-            get_object_or_404(Groups, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Groups, id=id).educenter
+                == self.request.user.educenter
         )
 
     def post(self, request, group, user):
@@ -363,8 +363,8 @@ class DetailPageView(View, UserPassesTestMixin):
         }
 
         if (
-            request.GET.get("to") == "excel"
-            and request.GET.get("type") == "journal"
+                request.GET.get("to") == "excel"
+                and request.GET.get("type") == "journal"
         ):
             FIO = [
                 f"{obj['first_name']} {obj['last_name']}"
@@ -379,15 +379,15 @@ class DetailPageView(View, UserPassesTestMixin):
                     (
                         "1"
                         if JournalCheck(group.id, s, m, day) == ""
-                        and day <= date.day
+                           and day <= date.day
                         else ""
                     )
                     for s in sids
                 ]
             return Json.to_excel(json_data)
         elif (
-            request.GET.get("to") == "excel"
-            and request.GET.get("type") == "students"
+                request.GET.get("to") == "excel"
+                and request.GET.get("type") == "students"
         ):
             json_data = {
                 "F.I.O": [
@@ -413,8 +413,8 @@ class DetailPageView(View, UserPassesTestMixin):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Groups, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Groups, id=id).educenter
+                == self.request.user.educenter
         )
 
 
@@ -429,7 +429,7 @@ class JournalPageView(LoginRequiredMixin, View):
         month = data.get("month")
 
         if not Journal.objects.filter(
-            group_id=group, student_id=student
+                group_id=group, student_id=student
         ).exists():
             res = Journal.objects.create(
                 group_id=group,

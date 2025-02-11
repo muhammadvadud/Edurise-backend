@@ -50,23 +50,30 @@ class CreateViewPage(CreateView):
             if int(self.request.POST["salary"]) > 100:
                 messages.error(
                     self.request,
-                    "Iltimos oylikni foizda kiriting maxsimal 100",
+                    "Iltimos oylikni foizda kiriting (maksimal 100%)",
                     extra_tags="danger",
                 )
                 return redirect(reverse("teachers:list"))
 
-            form = form.save(commit=False)
-            form.educenter = self.request.user.educenter
-            form.role = Users.ROLE_TEACHER
-            form.save()
-            teacher_form.instance.educenter = self.request.user.educenter
-            teacher_form.instance.user = form
-            teacher_form.instance.direction = self.request.POST["direction"]
-            teacher_form.instance.salary = self.request.POST["salary"]
-            teacher_form.save()
+            # User obyektini yaratish
+            user = form.save(commit=False)
+            user.educenter = self.request.user.educenter
+            user.role = Users.ROLE_TEACHER
+
+            # ⚠️ Bu joyda parolni hash’lamaymiz! Django avtomatik hash’laydi agar kerak bo‘lsa
+            user.save()
+
+            # Teacher obyektini yaratish
+            teacher = teacher_form.save(commit=False)
+            teacher.educenter = self.request.user.educenter
+            teacher.user = user
+            teacher.direction = self.request.POST["direction"]
+            teacher.salary = self.request.POST["salary"]
+            teacher.save()
+
             messages.success(self.request, "O'qituvchi qo'shildi")
         else:
-            messages.error(self.request, teacher_form, extra_tags="danger")
+            messages.error(self.request, teacher_form.errors, extra_tags="danger")
 
         return redirect(reverse("teachers:list"))
 
@@ -84,8 +91,8 @@ class DeleteViewPage(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Users, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Users, id=id).educenter
+                == self.request.user.educenter
         )
 
     def form_valid(self, form):
@@ -129,8 +136,8 @@ class EditViewPage(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Users, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Users, id=id).educenter
+                == self.request.user.educenter
         )
 
     def form_invalid(self, form):

@@ -1,6 +1,4 @@
 window.addEventListener("load", (e) => {
-  submitSearch();
-
   fileInputUpdatePath();
 
   dateTimeShortcutsOverlay();
@@ -11,6 +9,21 @@ window.addEventListener("load", (e) => {
 
   warnWithoutSaving();
 });
+
+/*************************************************************
+ * Alpine.sort.js callback after sorting
+ *************************************************************/
+const sortRecords = (e) => {
+  const orderingField = e.from.dataset.orderingField;
+
+  const weightInputs = Array.from(
+    e.from.querySelectorAll(`.has_original input[name$=-${orderingField}]`)
+  );
+
+  weightInputs.forEach((input, index) => {
+    input.value = index;
+  });
+};
 
 /*************************************************************
  * Warn without saving
@@ -24,9 +37,11 @@ const warnWithoutSaving = () => {
       "form.warn-unsaved-form input, form.warn-unsaved-form select, form.warn-unsaved-form textarea"
     );
 
-    Array.from(elements).forEach((field) => {
-      field.addEventListener("input", (e) => (formChanged = true));
-    });
+    for (const field of elements) {
+      field.addEventListener("input", () => {
+        formChanged = true;
+      });
+    }
   };
 
   if (!form) {
@@ -94,7 +109,7 @@ const watchClassChanges = (selector, callback) => {
  *************************************************************/
 const dateTimeShortcutsOverlay = () => {
   const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutationRecord) => {
+    for (const mutationRecord of mutations) {
       const display = mutationRecord.target.style.display;
       const overlay = document.getElementById("modal-overlay");
 
@@ -103,81 +118,50 @@ const dateTimeShortcutsOverlay = () => {
       } else {
         overlay.style.display = "none";
       }
-    });
+    }
   });
 
   const targets = document.querySelectorAll(".calendarbox, .clockbox");
 
-  Array.from(targets).forEach((target) => {
+  for (const target of targets) {
     observer.observe(target, {
       attributes: true,
       attributeFilter: ["style"],
     });
-  });
+  }
 };
 
 /*************************************************************
  * File upload path
  *************************************************************/
 const fileInputUpdatePath = () => {
-  Array.from(document.querySelectorAll("input[type=file]")).forEach((input) => {
-    input.addEventListener("change", (e) => {
-      const parts = e.target.value.split("\\");
-      const placeholder =
-        input.parentNode.parentNode.parentNode.querySelector(
-          "input[type=text]"
-        );
-      placeholder.setAttribute("value", parts[parts.length - 1]);
-    });
-  });
-};
+  const checkInputChanged = () => {
+    for (const input of document.querySelectorAll("input[type=file]")) {
+      if (input.hasChangeListener) {
+        continue;
+      }
 
-/*************************************************************
- * Search form on changelist view
- *************************************************************/
-const submitSearch = () => {
-  const searchbar = document.getElementById("searchbar");
-  const searchbarSubmit = document.getElementById("searchbar-submit");
+      input.addEventListener("change", (e) => {
+        const parts = e.target.value.split("\\");
+        const placeholder =
+          input.parentNode.parentNode.parentNode.querySelector(
+            "input[type=text]"
+          );
+        placeholder.setAttribute("value", parts[parts.length - 1]);
+      });
 
-  const getQueryParams = (searchString) => {
-    const queryParams = window.location.search
-      .replace("?", "")
-      .split("&")
-      .map((param) => param.split("="))
-      .reduce((values, [key, value]) => {
-        if (key && key !== "q") {
-          values[key] = value;
-        }
-
-        return values;
-      }, {});
-
-    if (searchString) {
-      queryParams["q"] = searchString;
+      input.hasChangeListener = true;
     }
-
-    const result = Object.entries(queryParams)
-      .map(([key, value]) => `${key}=${value}`)
-      .join("&");
-
-    return `?${result}`;
   };
 
-  if (searchbar !== null) {
-    searchbar.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        window.location = getQueryParams(e.target.value);
-        e.preventDefault();
-      }
-    });
-  }
+  new MutationObserver(() => {
+    checkInputChanged();
+  }).observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 
-  if (searchbarSubmit !== null && searchbar !== null) {
-    searchbarSubmit.addEventListener("click", (e) => {
-      e.preventDefault();
-      window.location = getQueryParams(searchbar.value);
-    });
-  }
+  checkInputChanged();
 };
 
 /*************************************************************
@@ -251,11 +235,10 @@ const DEFAULT_CHART_OPTIONS = {
         },
       },
       grid: {
-        lineWidth: function (context) {
+        lineWidth: (context) => {
           if (context.tick.value === 0) {
             return 1;
           }
-
           return 0;
         },
         tickWidth: 0,
@@ -265,38 +248,68 @@ const DEFAULT_CHART_OPTIONS = {
 };
 
 const renderCharts = () => {
-  let charts = [];
+  const charts = [];
 
   const changeDarkModeSettings = () => {
     const hasDarkClass = document
       .querySelector("html")
       .classList.contains("dark");
 
-    charts.forEach((chart) => {
-      chart.options.scales.x.grid.color = hasDarkClass ? "#374151" : "#d1d5db";
-      chart.options.scales.y.grid.color = hasDarkClass ? "#374151" : "#d1d5db";
+    const baseColorDark = getComputedStyle(document.documentElement)
+      .getPropertyValue("--color-base-700")
+      .trim();
+
+    const baseColorLight = getComputedStyle(document.documentElement)
+      .getPropertyValue("--color-base-300")
+      .trim();
+
+    const borderColor = hasDarkClass
+      ? `rgb(${baseColorDark})`
+      : `rgb(${baseColorLight})`;
+
+    for (const chart of charts) {
+      chart.options.scales.x.grid.color = borderColor;
+      chart.options.scales.y.grid.color = borderColor;
       chart.update();
-    });
+    }
   };
 
-  Array.from(document.querySelectorAll(".chart")).forEach((chart) => {
+  for (const chart of document.querySelectorAll(".chart")) {
     const ctx = chart.getContext("2d");
     const data = chart.dataset.value;
     const type = chart.dataset.type;
     const options = chart.dataset.options;
 
     if (!data) {
-      return;
+      continue;
+    }
+
+    const parsedData = JSON.parse(chart.dataset.value);
+
+    for (const key in parsedData.datasets) {
+      const dataset = parsedData.datasets[key];
+      const processColor = (colorProp) => {
+        if (dataset?.[colorProp]?.startsWith("var(")) {
+          const cssVar = dataset[colorProp].match(/var\((.*?)\)/)[1];
+          const color = getComputedStyle(document.documentElement)
+            .getPropertyValue(cssVar)
+            .trim();
+          dataset[colorProp] = `rgb(${color})`;
+        }
+      };
+
+      processColor("borderColor");
+      processColor("backgroundColor");
     }
 
     charts.push(
       new Chart(ctx, {
         type: type || "bar",
-        data: JSON.parse(chart.dataset.value),
+        data: parsedData,
         options: options ? JSON.parse(options) : DEFAULT_CHART_OPTIONS,
       })
     );
-  });
+  }
 
   changeDarkModeSettings();
 

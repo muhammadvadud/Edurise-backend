@@ -8,25 +8,23 @@ from .models import Courses
 from django.http import HttpRequest
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
-from .mixins import Mixin
+from .mixins import CeoRequiredMixin
 
 
 class ListViewPage(LoginRequiredMixin, View):
     def get(self, request: HttpRequest):
-        eduid = request.user.educenter.parent
-        if eduid is None:
-            eduid = request.user.educenter.id
+        # Foydalanuvchining ishlaydigan `EduCenter` ID sini olish
+        eduid = request.user.educenter.id or request.user.educenter.parent_id
 
+        # Shu `EduCenter` ga tegishli kurslarni olish
         context = {
-            "courses": Courses.objects.filter(educenter=eduid)
-            .order_by("id")
-            .reverse(),
+            "courses": Courses.objects.filter(educenter_id=eduid).order_by("-id"),
             "Users": Users,
         }
         return render(request, "course/list.html", context)
 
 
-class CreateViewPage(LoginRequiredMixin, Mixin, CreateView):
+class CreateViewPage(LoginRequiredMixin, CeoRequiredMixin, CreateView):
     template_name = "course/create.html"
     model = Courses
     fields = [
@@ -60,7 +58,7 @@ class CreateViewPage(LoginRequiredMixin, Mixin, CreateView):
 
 
 class DeleteViewPage(
-    LoginRequiredMixin, UserPassesTestMixin, Mixin, DeleteView
+    LoginRequiredMixin, UserPassesTestMixin, CeoRequiredMixin, DeleteView
 ):
     template_name = "course/delete.html"
     model = Courses
@@ -77,12 +75,12 @@ class DeleteViewPage(
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Courses, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Courses, id=id).educenter
+                == self.request.user.educenter
         )
 
 
-class EditViewPage(LoginRequiredMixin, Mixin, UserPassesTestMixin, UpdateView):
+class EditViewPage(LoginRequiredMixin, CeoRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = "course/edit.html"
     model = Courses
     fields = [
@@ -114,6 +112,6 @@ class EditViewPage(LoginRequiredMixin, Mixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Courses, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Courses, id=id).educenter
+                == self.request.user.educenter
         )

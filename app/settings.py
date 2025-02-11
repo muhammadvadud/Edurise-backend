@@ -5,7 +5,7 @@ from .conf import *  # noqa
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEFAULT_DOMAIN = "https://edusystem.uz"
+DEFAULT_DOMAIN = "https://edurise.uz"
 SECRET_KEY = (
     "django-insecure-1lu(y(f)_l&e+po=!e9vc^wxuctydry!^ayi-t9!5ojpv(8dyl"
 )
@@ -101,7 +101,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-#DATABASES = {
+# DATABASES = {
 #    "default": {
 #        "ENGINE": "django.db.backends.postgresql_psycopg2",
 #        "NAME": "django",
@@ -110,7 +110,7 @@ DATABASES = {
 #        "HOST": "db",
 #        "PORT": "5432",
 #    }
-#}
+# }
 
 
 # Password validation

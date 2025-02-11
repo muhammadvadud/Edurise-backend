@@ -5,7 +5,7 @@ from unfold.admin import ModelAdmin
 
 class AdminPageView(ModelAdmin):
     model = Users
-    list_display = ["id", "first_name", "last_name", "gender"]
+    list_display = ["username", "id", "first_name", "last_name", "gender"]
 
 
 admin.site.register(Users, AdminPageView)

@@ -37,10 +37,9 @@ class CreateViewPage(CreateView):
     ]
 
     def get_context_data(self, **kwargs):
-
-        eduid = self.request.user.educenter.parent
+        eduid = self.request.user.educenter.id
         if eduid is None:
-            eduid = self.request.user.educenter.id
+            eduid = self.request.user.educenter.parent
 
         data = super().get_context_data(**kwargs)
         data["form"].fields["first_name"].label = "Ism"
@@ -81,8 +80,8 @@ class DeleteViewPage(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Registration, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Registration, id=id).educenter
+                == self.request.user.educenter
         )
 
     def form_invalid(self, form):
@@ -116,6 +115,6 @@ class EditViewPage(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         id = self.kwargs["pk"]
         return (
-            get_object_or_404(Registration, id=id).educenter
-            == self.request.user.educenter
+                get_object_or_404(Registration, id=id).educenter
+                == self.request.user.educenter
         )

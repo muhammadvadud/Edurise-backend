@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.contrib.auth.hashers import make_password
 from education.models import EduCenter
 
 
 class Users(AbstractUser):
+    created_by_admin = models.BooleanField(default=False)  # Admin paneldan qo‘shilganmi yoki yo‘q
+
     MALE_GENDER = "Erkak"
     FEMALE_GENDER = "Ayol"
 
@@ -55,3 +57,14 @@ class Users(AbstractUser):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def save(self, *args, **kwargs):
+        # Parol o'zgartirilgan bo'lsa yoki yangi foydalanuvchi yaratilgan bo'lsa
+        if self.pk is None or self.password != self.__class__.objects.get(id=self.pk).password:
+            # Admin paneldan qo‘shilganligi holatini tekshirib, parolni hash’lash
+            if self.pk is None and self.created_by_admin:  # Faqat admin paneldan qo‘shilganda
+                self.password = make_password(self.password)
+            elif self.pk is not None:  # Faqat parol o'zgartirilganda hash'lash
+                self.password = make_password(self.password)
+
+        super().save(*args, **kwargs)

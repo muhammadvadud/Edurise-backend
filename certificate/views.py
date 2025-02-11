@@ -43,7 +43,7 @@ class GenerateCertificatePageView(View):
         certificate.student = student
         certificate.certificate.save(filename, open(filepath, "rb"))
         certificate.save()
-        url = "https://edusystem.uz{}".format(certificate.certificate.url)
+        url = "http://127.0.0.1:8000{}".format(certificate.certificate.url)
 
         try:
             os.remove(filepath)

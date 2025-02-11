@@ -1,9 +1,8 @@
-FROM jscorptech/edutop:v0.1
+FROM python:3.12
 
 WORKDIR /code
+COPY requirements.txt /code/
+RUN pip install -r requirements.txt
 
-COPY pyproject.toml pyproject.toml
-
-RUN poetry lock && poetry install
-
-CMD ["sh", "entrypoint.sh"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh  # Skriptni bajarish huquqini berish
