@@ -6,10 +6,11 @@ services:
       - .:/code
       - sqlite_data:/code/db
     ports:
-      - "8088:8000"
+      - "8001:8000"
     command: |
       bash -c "
-        python3 manage.py runserver 0.0.0.0:8088 & 
+        python3 manage.py migrate & 
+        python3 manage.py runserver 0.0.0.0:8001 & 
         wait
       "
 

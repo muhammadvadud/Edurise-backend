@@ -1,8 +1,10 @@
-FROM python:3.12
+FROM jscorptech/edutop:v0.1
 
 WORKDIR /code
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh  # Skriptni bajarish huquqini berish
+COPY requirements.txt /code/
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /code/
+
