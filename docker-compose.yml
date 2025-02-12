@@ -1,18 +1,10 @@
 services:
-  bot:
-    build:
-      context: .
-    volumes:
-      - .:/code
-      - sqlite_data:/code/db
+  web:
+    build: .
     ports:
-      - "8001:8000"
-    command: |
-      bash -c "
-        python3 manage.py migrate & 
-        python3 manage.py runserver 0.0.0.0:8001 & 
-        wait
-      "
-
-volumes:
-  sqlite_data:
+      - "8008:8008"
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=True
+    command: gunicorn --bind 0.0.0.0:8008 app.wsgi:application

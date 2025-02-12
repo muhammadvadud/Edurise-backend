@@ -13,12 +13,10 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", "edurise.uz"]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://edutop.loc",
-    "https://edutop.hostimuz.com",
-    "https://edusystem.uz",
+    "https://edurise.uz",
 ]
 
 # Application definition
