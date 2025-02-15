@@ -12,7 +12,8 @@
 
                             <h4 class="card-title">Sozlamalar</h4>
 
-                               <a url="{% url "settings:edit" %}" class="btn btn-sm btn-success show-modal main-background-color"
+                            <a url="{% url "settings:edit" %}"
+                               class="btn btn-sm btn-success show-modal main-background-color"
                                data-bs-toggle="modal"
                                data-bs-target=".bs-example-modal-center">O'zgartirish <i
                                     class="mdi mdi-arrow-right align-middle"></i></a>
@@ -28,11 +29,6 @@
                                             <tr class="gridjs-tr">
                                                 <td data-column-id="name" class="gridjs-td">Nomi</td>
                                                 <td data-column-id="email" class="gridjs-td">{{ data.name }}</td>
-                                            </tr>
-
-                                            <tr class="gridjs-tr">
-                                                <td data-column-id="name" class="gridjs-td">Logo</td>
-                                                <td data-column-id="email" class="gridjs-td">{{ data.logo }}</td>
                                             </tr>
 
 

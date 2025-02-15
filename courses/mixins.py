@@ -8,5 +8,7 @@ class CeoRequiredMixin:
 
         if request.user.role == Users.ROLE_CEO:  # String bilan emas, raqam bilan solishtirish!
             return super().dispatch(request, *args, **kwargs)
+        if request.user.role == Users.ROLE_ADMINISTRATOR:  # String bilan emas, raqam bilan solishtirish!
+            return super().dispatch(request, *args, **kwargs)
 
         raise PermissionDenied("Sizda ushbu sahifaga kirish huquqi yo'q.")

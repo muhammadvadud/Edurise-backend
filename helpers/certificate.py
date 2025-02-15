@@ -39,27 +39,27 @@ class Certificate:
 
         self.color = color
 
-        self.write(FIO, 180, 950)
+        self.write(FIO, 200, 1070)
 
         self.color = (119, 221, 4)
         self.font = self.get_font(90)
 
-        self.write(course, 180, 1200)
+        self.write(course, 200, 1270)
 
         self.color = None
         self.font = self.get_font(100)
-        self.write(complate, 180, 1340)
+        self.write(complate, 200, 1380)
 
         self.color = None
         self.font = self.get_font(100)
-        self.write(cid, 2330, 1870)
+        self.write(cid, 2550, 2010)
 
         self.filename = f"{uuid.uuid4()}.jpg"
         self.filepath = f"web/media/temp/{self.filename}"
 
         self.image.paste(
             self.get_qr("http://127.0.0.1:8000{}".format(f"/web/media/certificates/{self.filename}")),
-            (2200, 150),
+            (2330, 150),
         )
 
         self.image.save(self.filepath)

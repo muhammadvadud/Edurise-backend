@@ -28,7 +28,6 @@ class EditViewPage(View):
             "form": EduCenterEditForm(
                 initial={
                     "name": educenter.name,
-                    "logo": educenter.logo,
                     "parent": educenter.parent,
                 }
             )

@@ -6,27 +6,6 @@
 
 {% block content %}
 
-    <div class="modal fade sms-modal mt-5" tabindex="-1" aria-labelledby="mySmallModalLabel"
-         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-dialog-centered modal-width d-flex flex-column sms-modal-dialog" style="max-width: 800px;">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-between">
-                <p class="text-center fs-4 d-inline font-exo-bold">Sms Yuborish</p>
-                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div>
-                    <div id="sms-modal-content" style="display: flex;justify-content: center;flex-direction: column;">
-                        <p class="ms-4 fs-6 d-inline font-exo-bold">Xabar <span class="text-danger">*</span></p>
-                        <textarea name="message" id="sms-message-body" class="sms-modal-textarea m-auto" maxlength="255" rows="5" style="border: 0.3px solid rgba(0,0,0,0.44);outline: 0.6px"></textarea>
-                        <button id="sms-send" class="btn btn-primary main-background-color send-button" style="margin-right: auto;margin-left: 20px">Yuborish</button>
-
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
     <div class="page-content">
         <div class="container-fluid">
             <h1 class="detail_heading fs-2">{{ group.name }}<span class="fs-3"></span></h1>
@@ -188,12 +167,6 @@
                                         <div class="justify-content-center d-flex row mb-4 mt-2">
 
                                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 justify-content-between d-flex row mb-4 mt-2">
-
-                                                <button data-bs-toggle="modal"
-                                                        data-bs-target=".sms-modal"
-                                                        class="btn btn-primary main-background-color ms-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 d-inline m-auto">
-                                                    Barchaga sms yuborish
-                                                </button>
                                                 <a href="?month={{ m }}&type=students&to=excel"
                                                    class="btn btn-primary main-background-color ms-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 d-inline m-auto">Excel
                                                     Fayilda yuklash</a>
@@ -246,7 +219,7 @@
                                                     </a>
                                                 </td>
                                             </tr>
-                                        {% endfor %}
+                                        {% endfor %}show-modal
                                         </tbody>
 
                                     </table>

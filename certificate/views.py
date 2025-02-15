@@ -1,5 +1,6 @@
 import json
 
+from django.shortcuts import redirect
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.views import View
@@ -10,6 +11,13 @@ from helpers.certificate import Certificate
 from students.models import Students
 from certificate.models import Certificate as Cr
 from education.models import CertificateType
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from courses.mixins import CeoRequiredMixin
+from django.urls import reverse_lazy, reverse
 
 
 class GenerateCertificatePageView(View):
@@ -24,6 +32,7 @@ class GenerateCertificatePageView(View):
         return render(request, "certificate/generate.html", context)
 
     def post(self, request: HttpRequest, group):
+
         group = Groups.objects.get(id=group)
 
         student = get_object_or_404(Students, id=request.POST.get("student"))
@@ -54,3 +63,15 @@ class GenerateCertificatePageView(View):
             json.dumps({"url": url, "success": True}),
             content_type="application/json",
         )
+
+
+@csrf_exempt
+def delete_certificate(request, certificate_id):
+    if request.method == "POST":
+        try:
+            certificate = Cr.objects.get(id=certificate_id)
+            certificate.delete()
+            return JsonResponse({"success": True})
+        except Cr.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Sertifikat topilmadi!"})
+    return JsonResponse({"success": False, "error": "Noto‘g‘ri so‘rov!"})

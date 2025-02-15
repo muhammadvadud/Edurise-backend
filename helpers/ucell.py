@@ -28,7 +28,7 @@ class Ucell:
         self.__send_message_url = "https://my.ucell.uz/PcSms/SendSms"
         self.__send_otp_url = "https://my.ucell.uz/Account/GetOtpBySms"
         self.__set_password_url = "https://my.ucell.uz/Account/SetPwd"
-        self.__password = "Samandar001@"
+        self.__password = "MyUcellParol08"
         self.__phone = phone
         try:
             with open(f"sessions/{self.__phone}.db", "rb") as file:
@@ -132,7 +132,7 @@ class Ucell:
             return {"response": "server.error"}
 
 
-Ucell = Ucell("998936402078")
+Ucell = Ucell("998940105669")
 #
 # res = Ucell.login(password="Samandar001@",login_type=3)
 # res = Ucell.sendMessage("998943990509", "ishladiku")

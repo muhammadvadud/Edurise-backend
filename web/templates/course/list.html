@@ -9,13 +9,15 @@
                     <div class="card shadow-2">
                         <div class="card-header justify-content-between d-flex align-items-center mb-5">
                             <h4 class="card-title">Kurs ro'yhati</h4>
-                            {% if ceo %}
-                                <a url="{% url "courses:create" %}"
+                            {% if ceo or request.user.ROLE_ADMINISTRATOR %}
+                                <a url="{% url 'courses:create' %}"
                                    class="btn btn-sm btn-success show-offcanvas main-background-color"
                                    data-bs-toggle="offcanvas"
-                                   data-bs-target="#offcanvasRight">Qo'shish <i
-                                        class="mdi mdi-arrow-right align-middle"></i></a>
+                                   data-bs-target="#offcanvasRight">
+                                    Qo'shish <i class="mdi mdi-arrow-right align-middle"></i>
+                                </a>
                             {% endif %}
+
                         </div><!-- end card header -->
                         <div class="card-body">
                             <div class="table-responsive">

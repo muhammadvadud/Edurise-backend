@@ -59,6 +59,39 @@
                                                         </a>
                                                     {% endwith %}
                                                 {% endif %}
+{#                                                 <a type="button" class="show-modal"#}
+{#                                                        style="margin-left: 20px;"#}
+{#                                                       data-bs-toggle="modal"#}
+{#                                                       data-bs-target=".bs-example-modal-center"#}
+{#                                                       url="{% url "certificate:delete" pk=certificates.id %}">#}
+{#                                                        <i class="mdi mdi-trash-can-outline align-middle fs-4 p-0 m-0"></i>#}
+{#                                                 </a>#}
+                                                {% if group.course.id|userCertificate:student.id %}
+                                                    {% with group.course.id|userCertificate:student.id as data %}
+                                                        <button class="btn" onclick="confirmDelete({{ data.id }})"> <i class="mdi mdi-trash-can-outline align-middle fs-4 p-0 m-0"></i></button>
+                                                    {% endwith %}
+                                                {% else %}
+                                                {% endif %}
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Tasdiqlash</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Siz ushbu sertifikatni o‘chirmoqchimisiz?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button style="background-color: #F16623; color: white;" type="button" class="btn " data-bs-dismiss="modal">Bekor qilish</button>
+                                                                <button style="background-color: #F16623; color: white;" type="button" class="btn " id="confirmDeleteBtn">Ha, o‘chirish</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </td>
 
                                         </tr>
@@ -86,25 +119,27 @@
 
 {% block footer %}
     <script>
-        function generateCertificate(student) {
+         function generateCertificate(student) {
             let certificate_type = $(`#certificate-${student}`);
             certificate_type = certificate_type.val().split("-")[1];
             $.ajax({
                 method: "POST",
-                url: "{% url "certificate:generate" group=group.id %}",
+                url: "{% url 'certificate:generate' group=group.id %}",
                 data: {
                     "student": student,
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                     certificate_type: certificate_type,
                 },
                 success: function (data) {
-                    if (data.success === true){
+                    if (data.success === true) {
                         $(`#button-container-${student}`).html(`<a target="_blank" href="${data.url}"
-                                                           class="btn btn-success">Yuklab olish
-                                                        </a>`)
+                                                               class="btn btn-success">Yuklab olish
+                                                            </a>`);
+                        location.reload(); // This line will refresh the page
                     }
                 }
-            })
+            });
         }
+
     </script>
 {% endblock footer %}

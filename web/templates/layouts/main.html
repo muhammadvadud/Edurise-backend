@@ -334,6 +334,8 @@
 
 
     });
+
+
 </script>
     <script src="{% static "assets/js/datatable.js" %}"></script>
     <script src="{% static "assets/js/bootstrap-datatable.js" %}"></script>
@@ -358,7 +360,48 @@
         });
 </script>
 
+<script>let certificateIdToDelete = null;
 
+function confirmDelete(certificateId) {
+    certificateIdToDelete = certificateId;
+    let modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+    if (certificateIdToDelete) {
+       fetch(window.location.origin + `/certificate/delete/${certificateIdToDelete}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+        })
+
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert("Xatolik yuz berdi!");
+            }
+        });
+    }
+});
+
+// CSRF Token olish uchun funksiya
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        document.cookie.split(';').forEach(cookie => {
+            let trimmedCookie = cookie.trim();
+            if (trimmedCookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(trimmedCookie.substring(name.length + 1));
+            }
+        });
+    }
+    return cookieValue;
+}
+</script>
  <link href="{% static "assets/css/edutop-after.css" %}" id="app-style" rel="stylesheet" type="text/css"/>
 
 
