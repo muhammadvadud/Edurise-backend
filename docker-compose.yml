@@ -1,3 +1,5 @@
+version: '3.8'  # Docker Compose versiyasi
+
 services:
   web:
     build: .
@@ -6,5 +8,27 @@ services:
     volumes:
       - .:/app
     environment:
-      - DEBUG=True
+      - DEBUG=False
+      # PostgreSQL bilan ulanish uchun kerakli muhit o'zgaruvchilari
+      - DB_HOST=db           # PostgreSQL xizmatining nomi
+      - DB_NAME=postgres   # Database nomi
+      - DB_USER=postgres     # Foydalanuvchi
+      - DB_PASSWORD=Parollar008 # Parol (o'zingiz xohlagan parolni qo'ying)
+      - DB_PORT=5432         # PostgreSQL porti
     command: gunicorn --bind 0.0.0.0:8008 app.wsgi:application
+    depends_on:
+      - db                 # Web xizmati db xizmatiga bog'liq
+
+  db:
+    image: postgres:17     # PostgreSQL rasmiy imidji (16-versiya)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Ma'lumotlarni saqlash uchun volume
+    environment:
+      - POSTGRES_DB=postgres       # Database nomi
+      - POSTGRES_USER=postgres       # Foydalanuvchi
+      - POSTGRES_PASSWORD=Parollar008   # Parol (web bilan bir xil bo'lishi kerak)
+    ports:
+      - "5432:5432"                  # Tashqi ulanish uchun port (ixtiyoriy)
+
+volumes:
+  postgres_data:  # Ma'lumotlarni doimiy saqlash uchun nomlangan volume

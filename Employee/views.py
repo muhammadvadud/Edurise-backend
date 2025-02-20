@@ -32,8 +32,6 @@ class CreatePageView(LoginRequiredMixin, CreateView):
         data = super().get_context_data(*args, **kwargs)
         data["form"].fields["role"].choices = [
             (Users.ROLE_MANGER, "Manijer"),
-            (Users.ROLE_TEACHER, "O'qituvchi"),
-            (Users.ROLE_ADMINISTRATOR, "Administrator"),
             (Users.ROLE_CASHER, "Kasir"),
         ]
         return data
@@ -59,8 +57,6 @@ class EditPageView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         data = super().get_context_data(*args, **kwargs)
         data["form"].fields["role"].choices = [
             (Users.ROLE_MANGER, "Manijer"),
-            (Users.ROLE_TEACHER, "O'qituvchi"),
-            (Users.ROLE_ADMINISTRATOR, "Administrator"),
             (Users.ROLE_CASHER, "Kasir"),
         ]
         return data
