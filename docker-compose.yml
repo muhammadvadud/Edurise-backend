@@ -1,34 +1,31 @@
-version: '3.8'  # Docker Compose versiyasi
-
 services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: edurisedb
+      POSTGRES_USER: edurise_user
+      POSTGRES_PASSWORD: edurise_password
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/  # Ma'lumotlarni hostda saqlash
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U edurise_user -d edurisedb" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   web:
     build: .
-    ports:
-      - "8008:8008"
+    command: python manage.py runserver 0.0.0.0:8008
     volumes:
       - .:/app
-    environment:
-      - DEBUG=False
-      # PostgreSQL bilan ulanish uchun kerakli muhit o'zgaruvchilari
-      - DB_HOST=db           # PostgreSQL xizmatining nomi
-      - DB_NAME=postgres   # Database nomi
-      - DB_USER=postgres     # Foydalanuvchi
-      - DB_PASSWORD=Parollar008 # Parol (o'zingiz xohlagan parolni qo'ying)
-      - DB_PORT=5432         # PostgreSQL porti
-    command: gunicorn --bind 0.0.0.0:8008 app.wsgi:application
-    depends_on:
-      - db                 # Web xizmati db xizmatiga bog'liq
-
-  db:
-    image: postgres:17     # PostgreSQL rasmiy imidji (16-versiya)
-    volumes:
-      - postgres_data:/var/lib/postgresql/data  # Ma'lumotlarni saqlash uchun volume
-    environment:
-      - POSTGRES_DB=postgres       # Database nomi
-      - POSTGRES_USER=postgres       # Foydalanuvchi
-      - POSTGRES_PASSWORD=Parollar008   # Parol (web bilan bir xil bo'lishi kerak)
     ports:
-      - "5432:5432"                  # Tashqi ulanish uchun port (ixtiyoriy)
+      - "8008:8008"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://edurise_user:edurise_password@db:5432/edurisedb
 
-volumes:
-  postgres_data:  # Ma'lumotlarni doimiy saqlash uchun nomlangan volume
+
