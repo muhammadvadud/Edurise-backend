@@ -178,22 +178,14 @@
                             <span class="menu-item" data-key="t-sales">Xonalar</span>
                         </a>
                     </li>
-                {% endif %}
-
-                {% if ceo %}
                     <li>
-                        <a href="javascript: void(0);" class="has-arrow">
-                            <i class="fas fa-cogs  me-2"></i>
-                            <span class="menu-item" data-key="t-contacts">Sozlamalar</span>
+                        <a href="{% url "fast_certificate:list" %}">
+                            <i class="mdi mdi-certificate fs-3 me-2"></i>
+                            <span class="menu-item" data-key="t-sales">Certificate</span>
                         </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{% url "settings:list" %}" data-key="t-user-list">Asosiy sozlamalar</a>
-                            </li>
-                            <li><a href="{% url "education:list" %}" data-key="t-user-list">Filiallar sozlamasi</a>
-                            </li>
-                        </ul>
                     </li>
                 {% endif %}
+
 
 
 

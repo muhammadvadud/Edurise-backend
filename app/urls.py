@@ -21,6 +21,7 @@ urlpatterns = [
     path("certificate/", include("certificate.urls")),
     path("employee/", include("Employee.urls")),
     path("api/", include("api.urls")),
+    path("fast-certificate/", include("fast_certificate.urls")),
     re_path(r"media/(.*)", serve, {"document_root": settings.MEDIA_ROOT}),
     re_path(r"static/(.*)", serve, {"document_root": settings.STATIC_ROOT}),
 ]

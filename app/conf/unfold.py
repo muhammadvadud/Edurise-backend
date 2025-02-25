@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 UNFOLD = {
-    "SITE_TITLE": "Edusystem Admin panel",
-    "SITE_HEADER": "Edusystem Admin panel",
+    "SITE_TITLE": "EduRise Admin panel",
+    "SITE_HEADER": "EduRise Admin panel",
     "SITE_URL": "/",
     "SITE_SYMBOL": "speed",  # symbol from icon set
     "SHOW_HISTORY": True,  # show/hide "History" button, default: True
@@ -95,6 +95,10 @@ UNFOLD = {
                     {
                         "title": _("O'qituvchilar"),
                         "link": reverse_lazy("admin:teachers_teachers_changelist"),
+                    },
+                    {
+                        "title": _("FastCertificate"),
+                        "link": reverse_lazy("admin:fast_certificate_fastcertificate_changelist"),
                     },
                 ],
             },

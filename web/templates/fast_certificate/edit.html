@@ -5,15 +5,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header justify-content-between d-flex align-items-center">
-                    <h4 class="card-title">Guruh qo'shish</h4>
+                    <h4 class="card-title">Kursni o'zgartirish</h4>
+
                 </div><!-- end card header -->
                 <div class="card-body">
-                    <form class="needs-validation" autocomplete="off" action="{% url "groups:create" %}"
+                    <form class="needs-validation" action="{% url "courses:edit" pk=object.id %}"
                           method="post">{% csrf_token %}
-                        <div class="'row">
-                            {{ form|crispy }}
-                        </div>
-                        <button class="btn btn-primary main-background-color" type="submit">Qo'shish</button>
+                        {{ form|crispy }}
+                        <button class="btn btn-primary main-background-color" type="submit">Saqlash</button>
                     </form><!-- end form -->
                 </div><!-- end card body -->
             </div><!-- end card -->

@@ -1,6 +1,5 @@
 import json
 
-from django.shortcuts import redirect
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.views import View
@@ -13,11 +12,6 @@ from certificate.models import Certificate as Cr
 from education.models import CertificateType
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib import messages
-from courses.mixins import CeoRequiredMixin
-from django.urls import reverse_lazy, reverse
 
 
 class GenerateCertificatePageView(View):
@@ -52,7 +46,7 @@ class GenerateCertificatePageView(View):
         certificate.student = student
         certificate.certificate.save(filename, open(filepath, "rb"))
         certificate.save()
-        url = "http://127.0.0.1:8000{}".format(certificate.certificate.url)
+        url = "https://edurise.uz{}".format(certificate.certificate.url)
 
         try:
             os.remove(filepath)

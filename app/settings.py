@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "certificate",
     "api",
     "Employee",
+    "fast_certificate",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True

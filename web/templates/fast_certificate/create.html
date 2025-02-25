@@ -5,10 +5,11 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header justify-content-between d-flex align-items-center">
-                    <h4 class="card-title">Guruh qo'shish</h4>
+                    <h4 class="card-title">Certificate qo'shish</h4>
+
                 </div><!-- end card header -->
                 <div class="card-body">
-                    <form class="needs-validation" autocomplete="off" action="{% url "groups:create" %}"
+                    <form class="needs-validation" autocomplete="off" action="{% url "fast_certificate:create" %}"
                           method="post">{% csrf_token %}
                         <div class="'row">
                             {{ form|crispy }}
