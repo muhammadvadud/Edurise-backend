@@ -40,36 +40,14 @@
                                                 <select class="select-input" name="type"
                                                         id="certificate-{{ student.id }}">
                                                     <option value="">
-                                                        {{ student.certificate_type }}
+                                                        {{ student.certificate_type.name }}
                                                     </option>
                                                 </select>
                                             </td>
                                             <td>
 
                                                 <a target="_blank"
-                                                   href="
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                           {% if student.certificate %}{{ student.certificate.url }}{% else %}#{% endif %}"
+                                                   href="{% if student.certificate %}{{ student.certificate.url }}{% else %}#{% endif %}"
                                                    class="btn btn-success {% if not student.certificate %}disabled{% endif %}">
                                                     Yuklab olish
                                                 </a>
