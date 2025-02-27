@@ -97,19 +97,3 @@ class CreateViewPage(LoginRequiredMixin, CreateView):
     def form_invalid(self, form):
         messages.error(self.request, form.errors, extra_tags="danger")
         return redirect(reverse("fast_certificate:list"))
-
-
-#
-@csrf_exempt
-def delete_certificate(request, certificate_id):
-    print("Kelgan certificate_id:", certificate_id)  # Diagnostika uchun
-    if request.method == "POST":
-        try:
-            certificate = Cr.objects.get(id=certificate_id)
-            certificate.delete()
-            return JsonResponse({"success": True})
-        except Cr.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Sertifikat topilmadi!"})
-        except ValueError:
-            return JsonResponse({"success": False, "error": "Noto‘g‘ri ID formati!"})
-    return JsonResponse({"success": False, "error": "Noto‘g‘ri so‘rov!"})
