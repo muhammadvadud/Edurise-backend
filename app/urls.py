@@ -5,7 +5,7 @@ from django.views.static import serve
 
 urlpatterns = [
     path("", include("dashboard.urls")),
-    path("admin/", admin.site.urls),
+    path("admin351641161/", admin.site.urls),
     path("adm/", include("adm.urls")),
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
