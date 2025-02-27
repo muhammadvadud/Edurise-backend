@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "edutop"
+name = "Edurise"
 version = "0.1.0"
 description = ""
 authors = ["A'zamov Samandar <JscorpTech@gmail.com>"]

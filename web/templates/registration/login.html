@@ -27,19 +27,23 @@
                             {% endfor %}
                             <div class="form-floating form-floating-custom mb-3">
                                 <input required type="text" class="form-control" id="input-phone"
-                                       placeholder="Telefon nomeringizni kiriting" name="username">
+                                       placeholder="Username nomeringizni kiriting" name="username">
                                 <label for="input-phone">Username</label>
                                 <div class="form-floating-icon">
                                     <i class="uil uil-user"></i>
                                 </div>
                             </div>
-                            <div class="form-floating form-floating-custom mb-3">
+                            <div class="form-floating form-floating-custom mb-3 position-relative">
                                 <input required type="password" class="form-control" id="input-password"
                                        placeholder="Enter Password" name="password">
                                 <label for="input-password">Parol</label>
-                                <div class="form-floating-icon">
+                                <div style="font-size: 1.5em;" class="form-floating-icon">
                                     <i class="uil uil-padlock"></i>
                                 </div>
+                                <span class="position-absolute  top-50 end-0 translate-middle-y me-3"
+                                      style="cursor: pointer;"><i class="uil uil-eye" style="font-size: 1.5em;"
+                                                                  id="togglePassword"></i>
+                                </span>
                             </div>
 
 
@@ -71,4 +75,16 @@
 
         </div>
     </div><!-- end container -->
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('input-password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Ikonka o'zgarishi uchun
+            this.classList.toggle('uil-eye');
+            this.classList.toggle('uil-eye-slash');
+        });
+    </script>
+
 {% endblock content %}
