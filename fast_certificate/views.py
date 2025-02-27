@@ -27,6 +27,22 @@ class ListViewPage(LoginRequiredMixin, View):
         }
         return render(request, "fast_certificate/list.html", context)
 
+    def post(self, request):
+        name = request.POST.get("name")
+        certificate_id = request.POST.get("certificate_id")
+
+        if name == "delete":
+            try:
+                certificate = Cr.objects.get(id=certificate_id)
+                certificate.delete()
+                messages.success(request, "Certificate muvaffaqiyatli o'chirildi")
+            except Cr.DoesNotExist:
+                messages.error(request, "Certificate topilmadi")
+        else:
+            messages.error(request, "Certificate o'chirilmadi")
+
+        return redirect("fast_certificate:list")
+
 
 class CreateViewPage(LoginRequiredMixin, CreateView):
     template_name = "fast_certificate/create.html"
@@ -83,8 +99,10 @@ class CreateViewPage(LoginRequiredMixin, CreateView):
         return redirect(reverse("fast_certificate:list"))
 
 
+#
 @csrf_exempt
 def delete_certificate(request, certificate_id):
+    print("Kelgan certificate_id:", certificate_id)  # Diagnostika uchun
     if request.method == "POST":
         try:
             certificate = Cr.objects.get(id=certificate_id)
@@ -92,4 +110,6 @@ def delete_certificate(request, certificate_id):
             return JsonResponse({"success": True})
         except Cr.DoesNotExist:
             return JsonResponse({"success": False, "error": "Sertifikat topilmadi!"})
+        except ValueError:
+            return JsonResponse({"success": False, "error": "Noto‘g‘ri ID formati!"})
     return JsonResponse({"success": False, "error": "Noto‘g‘ri so‘rov!"})

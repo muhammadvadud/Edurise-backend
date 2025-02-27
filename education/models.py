@@ -3,12 +3,13 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CertificateType(models.Model):
+    educenter_name = models.CharField(max_length=255, verbose_name=_("O'quv markaz nomi"))
     name = models.CharField(max_length=255, verbose_name=_("Nomi"))
     file = models.ImageField(upload_to="certificates/", verbose_name=_("Fayil"))
     callback = models.CharField(max_length=255, verbose_name=_("Funksiya"))
 
     def __str__(self) -> str:
-        return self.name
+        return self.educenter_name
 
     class Meta:
         verbose_name = _("Sertifikat")

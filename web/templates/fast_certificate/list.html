@@ -30,7 +30,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for student in fast_certificate|dictsortreversed:"id" %}
+                                    {% for student in fast_certificate %}
                                         <tr>
                                             <th scope="row"><a
                                                     class="a-href"
@@ -69,30 +69,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                                            {% if student.certificate %}{{ student.certificate.url }}{% else %}#{% endif %}"
                                                    class="btn btn-success {% if not student.certificate %}disabled{% endif %}">
                                                     Yuklab olish
@@ -100,12 +76,13 @@
 
 
                                                 <button class="btn"
-                                                        onclick="confirmDeleteCertificate({{ student.id }})">
-                                                    <i class="mdi mdi-trash-can-outline align-middle fs-4 p-0 m-0"></i>
+                                                        data-bs-toggle="modal" data-bs-target="#CertificateDelete">
+                                                    <i class=" mdi mdi-trash-can-outline align-middle fs-4 p-0 m-0
+                                                "></i>
                                                 </button>
 
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="deleteModalCertificate" tabindex="-1"
+                                                <div class="modal fade" id="CertificateDelete" tabindex="-1"
                                                      aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
@@ -119,14 +96,21 @@
                                                                 Siz ushbu sertifikatni o‘chirmoqchimisiz?
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button style="background-color: #F16623; color: white;"
-                                                                        type="button" class="btn"
-                                                                        data-bs-dismiss="modal">Bekor qilish
-                                                                </button>
-                                                                <button style="background-color: #F16623; color: white;"
-                                                                        type="button" class="btn"
-                                                                        id="confirmDeleteBtnCertificate">Ha, o‘chirish
-                                                                </button>
+                                                                <form method="post" name="delete">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="name" value="delete">
+                                                                    <input type="hidden" name="certificate_id"
+                                                                           value="{{ student.id }}">
+
+                                                                    <button style="background-color: #F16623; color: white;"
+                                                                            type="button" class="btn"
+                                                                            data-bs-dismiss="modal">Bekor qilish
+                                                                    </button>
+                                                                    <button style="background-color: #F16623; color: white;"
+                                                                            type="submit" class="btn"
+                                                                            id="DeleteConfDS">Ha, o‘chirish
+                                                                    </button>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -155,49 +139,6 @@
         </div> <!-- container-fluid -->
     </div>
     <script>
-        let certificateIdToDelete = null;
-
-        function confirmDeleteCertificate(certificateId) {
-            certificateIdToDelete = certificateId;
-            let modal = new bootstrap.Modal(document.getElementById('deleteModalCertificate'));
-            modal.show();
-        }
-
-        document.getElementById("confirmDeleteBtnCertificate").addEventListener("click", function () {
-            if (certificateIdToDelete) {
-                fetch(window.location.origin + `/fast-certificate/delete/${certificateIdToDelete}/`, {
-                    method: "POST",  // Agar server `DELETE` qabul qilsa, method: "DELETE" qo‘llash mumkin
-                    headers: {
-                        "X-CSRFToken": getCookie("csrftoken"),
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            location.reload(); // Sahifani yangilash
-                        } else {
-                            alert("Xatolik yuz berdi!");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Xatolik:", error);
-                        alert("Server bilan bog‘lanishda xatolik yuz berdi!");
-                    });
-            }
-        });
-
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                document.cookie.split(';').forEach(cookie => {
-                    let trimmedCookie = cookie.trim();
-                    if (trimmedCookie.startsWith(name + '=')) {
-                        cookieValue = decodeURIComponent(trimmedCookie.substring(name.length + 1));
-                    }
-                });
-            }
-            return cookieValue;
-        }
 
 
     </script>
