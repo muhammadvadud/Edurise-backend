@@ -9,7 +9,7 @@
                     <div class="card shadow-2">
                         <div class="card-header justify-content-between d-flex align-items-center mb-5">
                             <h4 class="card-title">Kurs ro'yhati</h4>
-                            {% if ceo or request.user.ROLE_ADMINISTRATOR %}
+                            {% if ceo or maneger %}
                                 <a url="{% url 'courses:create' %}"
                                    class="btn btn-sm btn-success show-offcanvas main-background-color"
                                    data-bs-toggle="offcanvas"

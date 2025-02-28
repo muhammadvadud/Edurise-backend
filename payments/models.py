@@ -11,14 +11,10 @@ class Payments(models.Model):
     PAYME = "Payme"
     ClICK = "Click"
     NAQD = "Naqd"
-    APELSIN = "Apelsin"
     PLASTIC_KARTA = "Plastic kartasi"
-    BANK = "Bank hisobi"
 
     TYPE = (
-        (APELSIN, APELSIN),
         (PLASTIC_KARTA, PLASTIC_KARTA),
-        (BANK, BANK),
         (NAQD, NAQD),
         (PAYME, PAYME),
         (ClICK, ClICK),

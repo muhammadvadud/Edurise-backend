@@ -377,10 +377,10 @@ class DetailPageView(View, UserPassesTestMixin):
             for day in days:
                 json_data[f"{day} {m}"] = [
                     (
-                        "1"
+                        "-"
                         if JournalCheck(group.id, s, m, day) == ""
                            and day <= date.day
-                        else ""
+                        else "+"
                     )
                     for s in sids
                 ]
