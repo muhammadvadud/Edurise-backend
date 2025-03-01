@@ -1,21 +1,39 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header justify-content-between d-flex align-items-center">
-                        <h4 class="card-title">To'lov qilish</h4>
-                    </div><!-- end card header -->
-                    <div class="card-body">
-                        <form  class="needs-validation" action="{% url "payments:payment" %}" method="post"> {% csrf_token %}
-                            <div class="'row">
-                                {{ form|crispy }}
-                            </div>
-                            <button class="btn btn-primary main-background-color" type="submit">To'lash</button>
-                        </form><!-- end form -->
-                    </div><!-- end card body -->
-                </div><!-- end card -->
-            </div> <!-- end col -->
-        </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header justify-content-between d-flex align-items-center">
+                    <h4 class="card-title">To'lov qilish</h4>
+                </div><!-- end card header -->
+                <div class="card-body">
+                    <form class="needs-validation" action="{% url "payments:payment" %}" method="post"> {% csrf_token %}
+                        <div class="'row">
+                            {{ form|crispy }}
+                        </div>
+                        <button class="btn btn-primary main-background-color" type="submit">To'lash</button>
+                    </form><!-- end form -->
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div> <!-- end col -->
+    </div>
+    <script>
+        document.addEventListener("input", function (e) {
+            if (e.target.matches('input[name="amount"]')) {
+                let value = e.target.value.replace(/\D/g, ""); // Faqat raqamlarni qoldirish
+                let formattedValue = new Intl.NumberFormat('ru-RU').format(value); // 1 000 000 shaklida
+                e.target.value = formattedValue;
+            }
+        });
+
+        document.addEventListener("submit", function (e) {
+            const amountInput = e.target.querySelector('input[name="amount"]');
+            if (amountInput) {
+                amountInput.value = amountInput.value.replace(/\s/g, ""); // Bo‘sh joylarni olib tashlash
+            }
+        });
+    </script>
+
+
 {% endblock content %}

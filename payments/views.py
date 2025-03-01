@@ -56,6 +56,7 @@ class PaymentViewPage(View):
 class PayViewPage(LoginRequiredMixin, CreateView):
     template_name = "payments/pay.html"
     model = Payments
+
     fields = [
         "student",
         "group",
@@ -114,6 +115,9 @@ class PayViewPage(LoginRequiredMixin, CreateView):
 
         data["form"].fields["date"].widget = widgets.DateTimeInput(
             attrs={"type": "date"}
+        )
+        data["form"].fields["amount"].widget = widgets.TextInput(
+            attrs={"id": "amountInput", "type": "text"}
         )
 
         return data
