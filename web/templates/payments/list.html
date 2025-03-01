@@ -26,8 +26,10 @@
                             <div class="card border-top border-0 border-4 border-danger shadow">
                                 <div class="card-body">
                                     <h6 class="font-size-xs">
-                                        To'lovlar miqdori: {% toCurrency total_payment.amount__sum %} (01.08.2023 -
-                                        02.09.2023)
+                                        To'lovlar miqdori: {% toCurrency total_payment.amount__sum %}
+                                        {% if start_date and end_date %}
+                                            ({{ start_date }} - {{ end_date }})
+                                        {% endif %}
                                     </h6>
                                 </div>
                             </div>

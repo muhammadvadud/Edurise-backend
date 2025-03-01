@@ -8,7 +8,6 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
-
 from groups.models import Groups
 from payments.models import Payments
 from students.models import Students
@@ -19,27 +18,19 @@ class ListViewPage(LoginRequiredMixin, View):
         start_date = request.GET.get("start_date")
         end_date = request.GET.get("end_date")
 
-        if start_date is None and end_date is None:
-            payments = (
-                Payments.objects.filter(educenter=request.user.educenter)
-                .order_by("id")
-                .reverse()
-            )
-        else:
-            payments = (
-                Payments.objects.filter(
-                    educenter=request.user.educenter,
-                    date__gte=start_date,
-                    date__lte=end_date,
-                )
-                .order_by("id")
-                .reverse()
-            )
+        # Foydalanuvchi sanalarni tanlamagan bo'lsa, filter qo'llanmasin
+        payments = Payments.objects.filter(educenter=request.user.educenter).order_by("-id")
+
+        if start_date and end_date:
+            payments = payments.filter(date__gte=start_date, date__lte=end_date)
 
         total_payment = payments.aggregate(Sum("amount"))
+
         context = {
             "payments": payments,
             "total_payment": total_payment,
+            "start_date": start_date,  # Template-da tekshirish uchun kerak
+            "end_date": end_date,
         }
         return render(request, "payments/list.html", context)
 
