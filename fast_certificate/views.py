@@ -1,16 +1,14 @@
 import json
 from django.contrib import messages
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 import os
 from django.views.generic import CreateView, DeleteView, UpdateView
 from helpers.certificate import Certificate
 from fast_certificate.models import FastCertificate as Cr
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from accounts.models import Users
 from education.models import CertificateType
 

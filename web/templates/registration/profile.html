@@ -198,6 +198,7 @@
                                                     <th>To'lov miqdori</th>
                                                     <th>Sana</th>
                                                     <th>Izoh</th>
+                                                    <th>Chek</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -208,7 +209,11 @@
                                                         <td>{{ payment.amount }}</td>
                                                         <td>{{ payment.date }}</td>
                                                         <td>{{ payment.description }}</td>
-
+                                                        <td class="align-items-center d-flex">
+                                                            <a href="{{ payment.chek.url }}">
+                                                                <i class="mdi mdi-text-box-multiple-outline align-middle fs-4 text-danger p-0 m-0"></i>
+                                                            </a>
+                                                        </td>
                                                     </tr>
 
 

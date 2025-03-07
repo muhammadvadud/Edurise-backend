@@ -8,10 +8,14 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
+
+from courses.models import Courses
 from groups.models import Groups
 from payments.models import Payments
 from students.models import Students
 from django.contrib import messages
+from helpers.chek import generate_receipt
+from django.conf import settings
 
 
 class ListViewPage(LoginRequiredMixin, View):
@@ -41,15 +45,35 @@ class PaymentViewPage(View):
         data = self.request.POST
         group = Groups.objects.get(pk=data["group_id"])
         student = Students.objects.get(pk=data["student_id"])
-        Payments.objects.create(
+
+        # Avval Payment modeliga saqlash
+        payment = Payments.objects.create(
             student=student,
             group=group,
             type=data["type"],
             amount=data["amount"],
             date=data["date"],
             description=data["description"],
-            educenter=self.request.user.educenter,
+            educenter=request.user.educenter
         )
+
+        # Modeldan ma'lumot olib, chek yaratish
+        receipt_path = generate_receipt(
+            student_name=f"{student.first_name} {student.last_name}",
+            group_name=group.name,
+            payment_type=payment.type,
+            amount=payment.amount,
+            educenter_name=payment.educenter.name,
+            date=payment.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            course_name=group.course.name,
+            payment_id=payment.id,
+            status="Muvaffaqiyatli",
+        )
+
+        # Hosil bo'lgan chekni modelga qayta yozish
+        payment.chek = receipt_path.replace(str(settings.MEDIA_ROOT) + "/", "")
+        payment.save(update_fields=["chek"])
+
         messages.success(self.request, "To'lov muvaffaqiyatli amalga oshdi")
         return redirect("groups:detail", pk=group.id)
 

@@ -25,6 +25,7 @@
                                     <thead>
                                     <tr>
                                         <th>FIO</th>
+                                        <th>Kurs</th>
                                         <th>Certifikat turi</th>
                                         <th>#</th>
                                     </tr>
@@ -37,6 +38,9 @@
                                                     href="#">{{ student.first_name }} {{ student.last_name }}</a>
                                             </th>
                                             <td>
+                                                {{ student.course }}
+                                            </td>
+                                            <td>
                                                 <select class="select-input" name="type"
                                                         id="certificate-{{ student.id }}">
                                                     <option value="">
@@ -47,7 +51,13 @@
                                             <td>
 
                                                 <a target="_blank"
-                                                   href="{% if student.certificate %}{{ student.certificate.url }}{% else %}#{% endif %}"
+                                                   href="
+
+
+
+
+
+                                                           {% if student.certificate %}{{ student.certificate.url }}{% else %}#{% endif %}"
                                                    class="btn btn-success {% if not student.certificate %}disabled{% endif %}">
                                                     Yuklab olish
                                                 </a>

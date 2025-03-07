@@ -444,9 +444,11 @@
                                     <tr>
                                         <th>Sana</th>
                                         <th>Talaba ismi</th>
+                                        <th>Guruh</th>
                                         <th>Sum</th>
                                         <th>To'lov turi</th>
                                         <th>Izoh</th>
+                                        <th>Chek</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -454,9 +456,15 @@
                                         <tr>
                                             <td>{{ payment.date }}</td>
                                             <td>{{ payment.student.first_name }}</td>
+                                            <td>{{ payment.group.name }}</td>
                                             <td>{% toCurrency payment.amount %}</td>
                                             <td>{{ payment.type }}</td>
                                             <td>{{ payment.description }}</td>
+                                            <td class="align-items-center d-flex">
+                                                <a href="{{ payment.chek.url }}" target="_blank">
+                                                    <i class="mdi mdi-text-box-multiple-outline align-middle fs-4 text-danger p-0 m-0"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                     {% endfor %}
 
@@ -474,4 +482,8 @@
 
         </div> <!-- container-fluid -->
     </div>
+
+
+    <span class="mdi mdi-receipt-text"></span>
+
 {% endblock content %}
