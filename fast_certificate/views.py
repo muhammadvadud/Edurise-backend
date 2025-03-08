@@ -1,6 +1,6 @@
 import json
 from django.contrib import messages
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 import os
@@ -15,15 +15,18 @@ from education.models import CertificateType
 
 class ListViewPage(LoginRequiredMixin, View):
     def get(self, request: HttpRequest):
-        eduid = request.user.educenter.id or request.user.educenter.parent_id
+        if request.user.educenter.certificate_boolen:
+            eduid = request.user.educenter.id or request.user.educenter.parent_id
 
-        fast_certificate = Cr.objects.filter(educenter_id=eduid).order_by("-id")
+            fast_certificate = Cr.objects.filter(educenter_id=eduid).order_by("-id")
 
-        context = {
-            "fast_certificate": fast_certificate,
-            "Users": Users,
-        }
-        return render(request, "fast_certificate/list.html", context)
+            context = {
+                "fast_certificate": fast_certificate,
+                "Users": Users,
+            }
+            return render(request, "fast_certificate/list.html", context)
+        else:
+            return render(request, "403.html", status=403)
 
     def post(self, request):
         name = request.POST.get("name")
@@ -46,6 +49,12 @@ class CreateViewPage(LoginRequiredMixin, CreateView):
     template_name = "fast_certificate/create.html"
     model = Cr
     fields = ["first_name", "last_name", "course", "certificate_type"]
+
+    def dispatch(self, request: HttpRequest, *args, **kwargs):
+        """Agar ruxsat bo'lmasa, 403 sahifasiga yo'naltirish"""
+        if not request.user.educenter.certificate_boolen:
+            return render(request, "403.html", status=403)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)

@@ -105,8 +105,10 @@
                                                         <a href="?month={{ m }}&type=journal&to=excel"
                                                            class="btn btn-primary main-background-color m-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">Excel
                                                             Fayilda yuklash</a>
-                                                        <a href="{% url "certificate:generate" group=group.id %}"
-                                                           class="btn btn-primary main-background-color m-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">Certificate</a>
+                                                            {% if request.user.educenter.certificate_boolen %}
+                                                                <a href="{% url "certificate:generate" group=group.id %}"
+                                                                   class="btn btn-primary main-background-color m-auto mb-3 download-excel text-center col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">Certificate</a>
+                                                            {% endif %}
                                                     </div>
                                                     <div class="justify-content-end d-flex m-auto align-items-center col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 overflow-auto row">
                                                         {% for month in months %}

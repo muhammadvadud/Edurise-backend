@@ -178,12 +178,14 @@
                             <span class="menu-item" data-key="t-sales">Xonalar</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{% url "fast_certificate:list" %}">
-                            <i class="mdi mdi-certificate fs-3 me-2"></i>
-                            <span class="menu-item" data-key="t-sales">Certificate</span>
-                        </a>
-                    </li>
+                    {% if request.user.educenter.certificate_boolen %}
+                        <li>
+                            <a href="{% url "fast_certificate:list" %}">
+                                <i class="mdi mdi-certificate fs-3 me-2"></i>
+                                <span class="menu-item" data-key="t-sales">Certificate</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endif %}
 
 

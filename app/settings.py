@@ -13,11 +13,10 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", "edurise.uz", "https://cd9c-188-113-219-49.ngrok-free.app"]
+ALLOWED_HOSTS = ["*", "edurise.uz"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://edurise.uz",
-    "https://cd9c-188-113-219-49.ngrok-free.app"
 ]
 
 # Application definition

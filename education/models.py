@@ -23,6 +23,7 @@ class EduCenter(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     parent = models.BigIntegerField(blank=True, null=True)
     certificates = models.ManyToManyField("CertificateType", null=True, blank=True, verbose_name=_("Sertifikatlar"))
+    certificate_boolen = models.BooleanField(default=False, verbose_name=_("Sertifikat mumkim yoki mumkin emas?"))
 
     def __str__(self):
         return self.name

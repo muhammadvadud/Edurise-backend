@@ -17,13 +17,16 @@ from django.views.decorators.csrf import csrf_exempt
 class GenerateCertificatePageView(View):
 
     def get(self, request, group):
-        group = Groups.objects.get(id=group)
-        students = group.users.all()
-        certificates = request.user.educenter.certificates.all()
+        if request.user.educenter.certificate_boolen:
+            group = Groups.objects.get(id=group)
+            students = group.users.all()
+            certificates = request.user.educenter.certificates.all()
 
-        context = {"group": group, "students": students, "certificates": certificates}
+            context = {"group": group, "students": students, "certificates": certificates}
 
-        return render(request, "certificate/generate.html", context)
+            return render(request, "certificate/generate.html", context)
+        else:
+            return render(request, "403.html", status=403)
 
     def post(self, request: HttpRequest, group):
 
