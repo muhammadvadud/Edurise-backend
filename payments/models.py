@@ -31,7 +31,7 @@ class Payments(models.Model):
     amount = models.BigIntegerField()
     date = models.DateField(default=datetime.date.today)
     description = models.TextField(blank=True, null=True)
-    chek = models.FileField(upload_to="chek/")
+    chek = models.FileField(upload_to="chek/", default="chek/chek.jpg")
     educenter = models.ForeignKey(EduCenter, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
