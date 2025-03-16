@@ -2,16 +2,22 @@ import os
 import os.path
 from pathlib import Path
 from .conf import *  # noqa
+import environ
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 DEFAULT_DOMAIN = "https://edurise.uz"
-SECRET_KEY = (
-    "django-insecure-1lu(y(f)_l&e+po=!e9vc^wxuctydry!^ayi-t9!5ojpv(8dyl"
-)
+
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", False)
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ["*", "edurise.uz"]
 
@@ -54,6 +60,7 @@ INSTALLED_APPS = [
     "api",
     "Employee",
     "fast_certificate",
+    "salary",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -100,16 +107,18 @@ WSGI_APPLICATION = "app.wsgi.application"
 #         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
+# Database sozlamalari
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'edurisedb'),
-        'USER': os.getenv('POSTGRES_USER', 'edurise_user'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'edurise_password'),
-        'HOST': os.getenv('DATABASE_HOST', 'db'),
-        'PORT': os.getenv('DATABASE_PORT', '5432'),
+        'NAME': 'edurisedb',  # PostgreSQL bazasi nomi
+        'USER': 'edurise_user',  # PostgreSQL foydalanuvchi nomi
+        'PASSWORD': 'edurise_password',  # PostgreSQL paroli
+        'HOST': 'db',  # Docker Compose dagi db servisi nomi
+        'PORT': '5432',  # PostgreSQL standart porti
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

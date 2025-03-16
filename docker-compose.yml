@@ -1,12 +1,13 @@
 services:
   db:
     image: postgres:16
+    container_name: edurise_db
     environment:
       POSTGRES_DB: edurisedb
       POSTGRES_USER: edurise_user
       POSTGRES_PASSWORD: edurise_password
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data/  # Ma'lumotlarni hostda saqlash
+      - pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -17,7 +18,10 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8008
+    container_name: edurise_web
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8008"
     volumes:
       - .:/app
     ports:
@@ -28,4 +32,5 @@ services:
     environment:
       DATABASE_URL: postgres://edurise_user:edurise_password@db:5432/edurisedb
 
-
+volumes:
+  pg_data:
