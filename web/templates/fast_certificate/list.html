@@ -51,26 +51,22 @@
                                             <td>
 
                                                 <a target="_blank"
-                                                   href="
-
-
-
-
-
-                                                           {% if student.certificate %}{{ student.certificate.url }}{% else %}#{% endif %}"
+                                                   href="{% if student.certificate %}{{ student.certificate.url }}{% else %}#{% endif %}"
                                                    class="btn btn-success {% if not student.certificate %}disabled{% endif %}">
                                                     Yuklab olish
                                                 </a>
 
 
                                                 <button class="btn"
-                                                        data-bs-toggle="modal" data-bs-target="#CertificateDelete">
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#CertificateDelete-{{ student.id }}">
                                                     <i class=" mdi mdi-trash-can-outline align-middle fs-4 p-0 m-0
                                                 "></i>
                                                 </button>
 
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="CertificateDelete" tabindex="-1"
+                                                <div class="modal fade" id="CertificateDelete-{{ student.id }}"
+                                                     tabindex="-1"
                                                      aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
