@@ -2,6 +2,7 @@ import os
 import asyncio
 import datetime
 import subprocess
+import zipfile
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.fsm.state import State, StatesGroup
@@ -71,40 +72,85 @@ def create_backup():
         return None
 
 
+def zip_media_folder():
+    """web/media papkasini zip qilish"""
+    media_dir = "./web/media"  # Media papkasi joylashgan manzil
+    if not os.path.exists(media_dir):
+        logging.error("Media papkasi topilmadi!")
+        return None
+
+    date_str = datetime.datetime.now(TASHKENT_TZ).strftime("%Y-%m-%d_%H-%M-%S")
+    zip_filename = f"media_backup_{date_str}.zip"
+    zip_path = os.path.join(BACKUP_DIR, zip_filename)
+
+    try:
+        # Zip arxivini yaratish
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(media_dir):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, media_dir)
+                    zipf.write(file_path, arcname)
+        logging.info(f"Media papkasi muvaffaqiyatli arxivlandi: {zip_path}")
+        return zip_path
+    except Exception as e:
+        logging.error(f"Media papkasini arxivlashda xatolik: {e}")
+        return None
+
+
 async def send_telegram_message(text):
     """Xabar yuborish"""
     await bot.send_message(OWNER_ID, text)
 
 
 async def backup_and_send():
-    """Backupni yaratish va yuborish"""
-    await send_telegram_message("📌 PostgreSQL backup jarayoni boshlandi...")
+    """Backupni yaratish va yuborish (PostgreSQL + Media)"""
+    await send_telegram_message("📌 PostgreSQL va Media backup jarayoni boshlandi...")
 
-    backup_file = create_backup()
-
-    if backup_file:
-        await send_telegram_message("✅ Backup tayyor! Fayl jo‘natilmoqda...")
-        document = FSInputFile(backup_file)
+    # PostgreSQL backup
+    pg_backup_file = create_backup()
+    if pg_backup_file:
+        await send_telegram_message("✅ PostgreSQL backup tayyor! Fayl jo‘natilmoqda...")
+        document = FSInputFile(pg_backup_file)
         await bot.send_document(OWNER_ID, document=document)
-        os.remove(backup_file)  # Faylni yuborilgandan so'ng o'chirish
+        os.remove(pg_backup_file)  # Faylni yuborilgandan so'ng o'chirish
     else:
-        await send_telegram_message("❌ Backup yaratishda xatolik yuz berdi!")
+        await send_telegram_message("❌ PostgreSQL backup yaratishda xatolik yuz berdi!")
+
+    # Media backup
+    media_zip_file = zip_media_folder()
+    if media_zip_file:
+        await send_telegram_message("✅ Media backup tayyor! Fayl jo‘natilmoqda...")
+        document = FSInputFile(media_zip_file)
+        await bot.send_document(OWNER_ID, document=document)
+        os.remove(media_zip_file)  # Faylni yuborilgandan so'ng o'chirish
+    else:
+        await send_telegram_message("❌ Media backup yaratishda xatolik yuz berdi!")
 
 
 @dp.message(Command("backup"))
 async def manual_backup(message: types.Message):
-    """Darhol backup yaratish"""
+    """Darhol backup yaratish (PostgreSQL + Media)"""
     if message.from_user.id == OWNER_ID:
-        await message.reply("📌 PostgreSQL backup jarayoni boshlandi...")
+        await message.reply("📌 PostgreSQL va Media backup jarayoni boshlandi...")
 
-        backup_file = create_backup()
-
-        if backup_file:
-            document = FSInputFile(backup_file)
-            await message.reply_document(document, caption="✅ Backup tayyor!")
-            os.remove(backup_file)  # Faylni yuborilgandan so'ng o'chirish
+        # PostgreSQL backup
+        pg_backup_file = create_backup()
+        if pg_backup_file:
+            document = FSInputFile(pg_backup_file)
+            await message.reply_document(document, caption="✅ PostgreSQL backup tayyor!")
+            os.remove(pg_backup_file)  # Faylni yuborilgandan so'ng o'chirish
         else:
-            await message.reply("❌ Backup yaratishda xatolik yuz berdi!")
+            await message.reply("❌ PostgreSQL backup yaratishda xatolik yuz berdi!")
+
+        # Media backup
+        media_zip_file = zip_media_folder()
+        if media_zip_file:
+            document = FSInputFile(media_zip_file)
+            await message.reply_document(document, caption="✅ Media backup tayyor!")
+            os.remove(media_zip_file)  # Faylni yuborilgandan so'ng o'chirish
+        else:
+            await message.reply("❌ Media backup yaratishda xatolik yuz berdi!")
     else:
         await message.reply("❌ Sizda bu buyruqni ishlatish huquqi yo‘q!")
 
