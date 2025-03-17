@@ -116,5 +116,5 @@ GitHub.sublime-settings
 db.sqlite3
 postgres_data
 backups
-
+backup.sql
 

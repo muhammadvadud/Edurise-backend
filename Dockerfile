@@ -21,4 +21,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # Django serverini ishga tushirish uchun buyruq
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8008"]
+CMD ["gunicorn", "app.wsgi:application", "--bind", "0.0.0.0:8008"]

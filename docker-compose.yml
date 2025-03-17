@@ -2,6 +2,7 @@ services:
   db:
     image: postgres:16
     container_name: edurise_db
+    restart: always
     environment:
       POSTGRES_DB: edurisedb
       POSTGRES_USER: edurise_user
@@ -19,18 +20,21 @@ services:
   web:
     build: .
     container_name: edurise_web
+    restart: always
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8008"
+             python manage.py collectstatic --noinput &&
+             gunicorn app.wsgi:application --bind 0.0.0.0:8008 --workers=4"
     volumes:
       - .:/app
+      - static_volume:/app/static
     ports:
       - "8008:8008"
     depends_on:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgres://edurise_user:edurise_password@db:5432/edurisedb
-
+      DATABASE_URL: postgresql://edurise_user:edurise_password@db:5432/edurisedb
 volumes:
   pg_data:
+  static_volume:
